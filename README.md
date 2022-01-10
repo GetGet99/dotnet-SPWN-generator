@@ -13,7 +13,7 @@ Future Plans:
 
 # Why this project?
 
-If you're a fan of IntelliSense or other similar things, using this project helps.
+If you're a fan of IntelliSense or other similar things, using this project might help you.
 
 # Usage
 See SPWNTestProject for simple example
