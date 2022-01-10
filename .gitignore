@@ -3,3 +3,7 @@
 ################################################################################
 
 /.vs
+/SPWN/obj
+/SPWN/bin
+/SPWNTestProject/obj
+/SPWNTestProject/bin
