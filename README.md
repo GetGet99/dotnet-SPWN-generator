@@ -11,6 +11,9 @@ Future Plans:
 * Let User create simple wrapper for libraries or in case SPWN gets updated (since I don't think I might be able to keep this project up-to-date later on, and it will let user use it even if this project is dead.)
 * Add all features of SPWN regular libraries
 
+## Completed Implementation
+* Group (Not yet for docs)
+
 # Why this project?
 
 If you're a fan of IntelliSense, Typing, or other features avaliable in .NET or .NET editor, using this project might help you.
