@@ -1,19 +1,16 @@
 ﻿using SPWNCreator;
-using SPWNBasics = SPWN.Basics;
-using SPWNDataTypes = SPWN.DataTypes;
-using SPWNLibraries = SPWN.Libraries;
 using static SPWN.Basics.Extensions;
 using static SPWN.Basics.SPWNUtils;
 
 Generator.PrintToConsole(
     Codes:
-    new SPWNBasics.SPWNCodes
+    new SPWN.Basics.SPWNCodes
     {
         Comment("Groups of the objects that decide the position of"),
         Comment("our buttons"),
-        new SPWNBasics.Variable<SPWNDataTypes.List<SPWNDataTypes.Group>>(
+        new SPWN.Basics.Variable<SPWN.DataTypes.List<SPWN.DataTypes.Group>>(
             VariableName: "anchors",
-            Value: new SPWNDataTypes.Group[] {
+            Value: new SPWN.DataTypes.Group[] {
                 1, 2, 3, 4, 5, 6
             }
         ).Init(out var anchors),
@@ -22,29 +19,29 @@ Generator.PrintToConsole(
         Comment("Group of the object that indicates which"),
         Comment("button is currently selected"),
 
-        new SPWNBasics.Variable<SPWNDataTypes.Group>(
+        new SPWN.Basics.Variable<SPWN.DataTypes.Group>(
             VariableName: "selector",
             Value: 7
         ).Init(out var selector),
 
         NewLine(),
 
-        new SPWNBasics.Variable<SPWNLibraries.Gamescene>(
+        new SPWN.Basics.Variable<SPWN.Libraries.Gamescene>(
             VariableName: "gs",
-            Value: new SPWNLibraries.Gamescene()
+            Value: new SPWN.Libraries.Gamescene()
         ).Init(out var gs),
 
         NewLine(),
 
         Comment("starts at first button (index 0)"),
-        new SPWNBasics.Variable<SPWNDataTypes.Counter>(
+        new SPWN.Basics.Variable<SPWN.DataTypes.Counter>(
             VariableName: "selected",
-            Value: new SPWNDataTypes.Counter(0)
+            Value: new SPWN.DataTypes.Counter(0)
         ).Init(out var selected),
 
         NewLine(),
 
-        gs.ButtonA().OnTriggered(new SPWNDataTypes.MacroAction( new SPWNBasics.SPWNCodes
+        gs.ButtonA().OnTriggered(new SPWN.DataTypes.MacroAction( new SPWN.Basics.SPWNCodes
         {
             Comment("switch"),
             selected.SetAdd(1),
@@ -54,7 +51,7 @@ Generator.PrintToConsole(
             ),
 
             Comment("convert selected to a normal number"),
-            new SPWNBasics.Variable<SPWNDataTypes.Group>(
+            new SPWN.Basics.Variable<SPWN.DataTypes.Group>(
                 VariableName:"current_anchor",
                 Value: anchors[selected.ToConst((0,anchors.Length.AsValue())).AsValue()].AsValue()
             ).Init(out var current_anchor),
