@@ -1,6 +1,6 @@
 # dotnet-SPWN-generator
 
-Simple, incomplete generator that generates SPWN code from .Net 6 code.
+Simple, incomplete generator that generates SPWN code from .NET 6 code.
 
 # What it can do?
 Currently, it can:
@@ -13,7 +13,7 @@ Future Plans:
 
 # Why this project?
 
-If you're a fan of IntelliSense or other similar things, using this project might help you.
+If you're a fan of IntelliSense, Typing, or other features avaliable in .NET or .NET editor, using this project might help you.
 
 # Usage
 See SPWNTestProject for simple example
