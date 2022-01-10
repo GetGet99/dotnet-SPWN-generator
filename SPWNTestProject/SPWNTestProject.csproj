@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="DataTypes\**" />
+    <Compile Remove="InternalAndBasics\**" />
+    <Compile Remove="Libraries\**" />
+    <EmbeddedResource Remove="DataTypes\**" />
+    <EmbeddedResource Remove="InternalAndBasics\**" />
+    <EmbeddedResource Remove="Libraries\**" />
+    <None Remove="DataTypes\**" />
+    <None Remove="InternalAndBasics\**" />
+    <None Remove="Libraries\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SPWN\SPWN.csproj" />
+  </ItemGroup>
+
+</Project>
