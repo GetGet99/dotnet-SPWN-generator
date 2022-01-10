@@ -103,6 +103,33 @@ namespace SPWN.Basics
             if (constructor.Invoke(new object[] { expr }) is not T toreturn) throw new ArgumentException("Error when creating, returning <null>");
             return toreturn;
         }
+        public struct SPWNMethodCallBuilder
+        {
+            string MethodName { get; }
+            List<string> ParamList { get; } = new List<string>();
+            public SPWNMethodCallBuilder(string MethodName)
+            {
+                this.MethodName = MethodName;
+            }
+            public SPWNMethodCallBuilder AddParameter<T>(string ParamName, T? Value) where T : ISPWNValue
+            {
+                if (Value == null) goto Return;
+                ParamList.Add($"{ParamName} = {Value.ValueAsString}");
+            Return:
+                return this;
+            }
+            public SPWNMethodCallBuilder AddParameter(string ParamName, Enum Value)
+            {
+                if (Value == null) goto Return;
+                ParamList.Add($"{ParamName} = {Value}");
+            Return:
+                return this;
+            }
+            public StringSPWNCode Build()
+            {
+                return new StringSPWNCode($"{MethodName}({ParamList.JoinString(",")})");
+            }
+        }
     }
 }
 namespace SPWN.InternalImplementation

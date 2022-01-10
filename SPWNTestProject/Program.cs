@@ -41,7 +41,7 @@ Generator.PrintToConsole(
 
         NewLine(),
 
-        gs.ButtonA().OnTriggered(new SPWN.DataTypes.MacroAction( new SPWN.Basics.SPWNCodes
+        gs.ButtonA().OnTriggered(new SPWN.DataTypes.TriggerFunction( new SPWN.Basics.SPWNCodes
         {
             Comment("switch"),
             selected.SetAdd(1),
@@ -53,7 +53,7 @@ Generator.PrintToConsole(
             Comment("convert selected to a normal number"),
             new SPWN.Basics.Variable<SPWN.DataTypes.Group>(
                 VariableName:"current_anchor",
-                Value: anchors[selected.ToConst((0,anchors.Length.AsValue())).AsValue()].AsValue()
+                Value: anchors[selected.ToConst(new SPWN.DataTypes.Range<SPWN.DataTypes.Number>(0,anchors.Length.AsValue())).AsValue()].AsValue()
             ).Init(out var current_anchor),
 
             selector.MoveTo(current_anchor)

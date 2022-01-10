@@ -20,7 +20,7 @@ public class Gamescene : Module
         {
             ValueAsString = Code;
         }
-        public ISPWNCode OnTriggered(MacroAction MacroValues)
+        public ISPWNCode OnTriggered(TriggerFunction MacroValues)
         {
             return new StringSPWNCode($"{ValueAsString}.on_triggered({MacroValues.ValueAsString})");
         }
