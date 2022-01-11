@@ -46,8 +46,8 @@ Generator.PrintToConsole(
 // Example 2
 // Reference: https://spu7nix.net/spwn/#/triggerlanguage/7selectorpanel
 
-// You can implicitly casting C# Array into SPWN.DataTypes.List, just like this
-SPWN.DataTypes.Array<SPWN.DataTypes.Group> GroupList = new SPWN.DataTypes.Group[] { 1, 2, 3, 4, 5, 6 };
+// You can implicitly casting C# Array into SPWN.DataTypes.Array, just like this
+SPWN.DataTypes.Array<SPWN.DataTypes.Group> ArrayOfGroups = new SPWN.DataTypes.Group[] { 1, 2, 3, 4, 5, 6 };
 
 Generator.PrintToConsole(
     Codes:
@@ -62,7 +62,7 @@ Generator.PrintToConsole(
         // If you want to create constant (non-mutable) variable in SPWN, you need to use CreateConstantVariable<T>(string VariableName, out T Variable, T Value)
         // Note: CreateVariable means constant variables
         // VariableName is the variable name in SPWN
-        CreateConstantVariable("anchors", out var anchors, GroupList),
+        CreateConstantVariable("anchors", out var anchors, ArrayOfGroups),
 
         NewLine(),
         Comment("Group of the object that indicates which"),
