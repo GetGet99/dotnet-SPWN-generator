@@ -13,6 +13,10 @@ Future Plans:
 
 ## Completed Implementation
 * Group (Not yet for docs)
+* Color (Not yet for docs)
+* Block (Not yet for docs)
+* Item (Not yet for docs)
+* Number (Not yet for docs)
 
 # Why this project?
 
