@@ -103,3 +103,30 @@ Generator.PrintToConsole(
         }))
     }
 );
+/* Code Output:
+// Example 2
+
+// Groups of the objects that decide the position of
+// our buttons
+anchors = [1g,2g,3g,4g,5g,6g]
+
+// Group of the object that indicates which
+// button is currently selected
+selector = 7g
+
+gs = import gamescene
+
+// starts at first button (index 0)
+selected = counter(0)
+
+gs.button_a().on_triggered(function = !{
+    // switch
+    selected.add(num = 1)
+    if selected >= anchors.length {
+        selected.reset()
+    }
+    // convert selected to a normal number
+    current_anchor = anchors[selected.to_const(0..anchors.length)]
+    selector.move_to(target = current_anchor)
+})
+*/
