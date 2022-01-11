@@ -20,6 +20,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="outputExample.spwn" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\SPWN\SPWN.csproj" />
   </ItemGroup>
 

@@ -129,6 +129,10 @@ namespace SPWN.Basics
             {
                 return new StringSPWNCode($"{MethodName}({ParamList.JoinString(",")})");
             }
+            public StringSPWNExpr<T> BuildExpr<T>() where T : ISPWNValue
+            {
+                return new StringSPWNExpr<T>($"{MethodName}({ParamList.JoinString(",")})");
+            }
         }
     }
 }

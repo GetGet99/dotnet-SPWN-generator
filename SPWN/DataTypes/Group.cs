@@ -4,7 +4,7 @@ using SPWN.Basics;
 using SPWN.InternalImplementation;
 using CodeAnalysis = System.Diagnostics.CodeAnalysis;
 using static SPWN.Basics.Extensions;
-public class Group : ISPWNValue, IRangeImplemented
+public class Group : ISPWNValue, IRangeImplemented, IPulseAble
 {
     public string ValueAsString { get; set; }
 
@@ -117,7 +117,7 @@ public class Group : ISPWNValue, IRangeImplemented
 
     /**
      * <summary>
-     * Allias of MoveToXY
+     * Alias of MoveToXY
      * </summary>
      * <param name="X">X position to move to in units (1 grid square is 30 units) (Default: Null)</param>
      * <param name="Y">Will move to the object only on the X-axis (Default: Null)</param>
@@ -130,7 +130,7 @@ public class Group : ISPWNValue, IRangeImplemented
 
     /**
      * <summary>
-     * Allias of MoveToXY
+     * Alias of MoveToXY
      * </summary>
      * <param name="Point">X and Y position to move to in units (1 grid square is 30 units) (Default: Null)</param>
      * <param name="Duration">Duration of movement (Default: 0)</param>
@@ -161,7 +161,7 @@ public class Group : ISPWNValue, IRangeImplemented
 
     /**
      * <summary>
-     * Allias of MoveToXY(Number? X, Number? Y, ...)
+     * Alias of MoveToXY(Number? X, Number? Y, ...)
      * </summary>
      * <param name="Point">X and Y position to move to in units (1 grid square is 30 units) (Default: Null)</param>
      * <param name="Duration">Duration of movement (Default: 0)</param>
@@ -205,18 +205,7 @@ public class Group : ISPWNValue, IRangeImplemented
         => PreciseMove(X: Point.X, Y: Point.Y, Duration: Duration, Easing: Easing, EasingRate: EasingRate, Single: Single);
 
     public ISPWNCode Pulse(Number R, Number G, Number B, Number? FadeIn = null, Number? Hold = null, Number? FadeOut = null, Boolean? Exclusive = null, Boolean? HSVMode = null, Boolean? SaturationChecked = null, Boolean? BrightnessChecked = null)
-        => new SPWNMethodCallBuilder($"{ValueAsString}.pulse")
-        .AddParameter("r", R)
-        .AddParameter("g", G)
-        .AddParameter("b", B)
-        .AddParameter("fade_in", FadeIn)
-        .AddParameter("hold", Hold)
-        .AddParameter("fade_out", FadeOut)
-        .AddParameter("exclusive", Exclusive)
-        .AddParameter("hsv", HSVMode)
-        .AddParameter("s_checked", SaturationChecked)
-        .AddParameter("b_checked", BrightnessChecked)
-        .Build();
+        => (this as IPulseAble).Pulse(R: R, G: G, B: B, FadeIn: FadeIn, Hold: Hold, FadeOut: FadeOut, Exclusive: Exclusive, HSVMode: HSVMode, SaturationChecked: SaturationChecked, BrightnessChecked: BrightnessChecked);
 
     public ISPWNCode Rotate(Group Center, Number Degrees, Number? Duration = null, EasingTypes Easing = EasingTypes.NONE, Number? EasingRate = null, Boolean? LockObjectRotation = null)
         => new SPWNMethodCallBuilder($"{ValueAsString}.rotate")

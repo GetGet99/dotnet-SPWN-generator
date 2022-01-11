@@ -8,21 +8,10 @@ public class Gamescene : Module
 
     public Gamescene() : base("gamescene") { }
     public Gamescene(ISPWNExpr<Gamescene> Value) => ValueAsString = Value.CreateCode().AddParenthesis();
-    public GamesceneEvent ButtonA() => new ($"{ValueAsString}.button_a()");
-    public GamesceneEvent ButtonAEnd() => new($"{ValueAsString}.button_a_end()");
-    public GamesceneEvent ButtonB() => new($"{ValueAsString}.button_b()");
-    public GamesceneEvent ButtonBEnd() => new($"{ValueAsString}.button_b_end()");
+    public Event ButtonA() => new ($"{ValueAsString}.button_a()");
+    public Event ButtonAEnd() => new($"{ValueAsString}.button_a_end()");
+    public Event ButtonB() => new($"{ValueAsString}.button_b()");
+    public Event ButtonBEnd() => new($"{ValueAsString}.button_b_end()");
 
-    public class GamesceneEvent : ISPWNValue
-    {
-        public string ValueAsString { get; set; }
-        public GamesceneEvent(string Code)
-        {
-            ValueAsString = Code;
-        }
-        public ISPWNCode OnTriggered(TriggerFunction MacroValues)
-        {
-            return new StringSPWNCode($"{ValueAsString}.on_triggered({MacroValues.ValueAsString})");
-        }
-    }
+    
 }
