@@ -32,12 +32,21 @@ namespace SPWN.Basics
     {
         public static ISPWNCode NewLine(ushort times = 1) => new StringSPWNCode(new string('\n',times - 1));
         public static ISPWNCode Comment(string s) => new StringSPWNCode($"// {s}");
+        public static ISPWNCode RunParallel(ISPWNCode code) => new SPWNCodeParallel(code);
         //[System.Runtime.CompilerServices.CallerArgumentExpression("Variable")] 
-        public static ISPWNCode NewVariable<T>(out T Variable, T Value, string VariableName) where T : class, ISPWNValue
+
+        public static ISPWNCode CreateConstantVariable<T>(string VariableName, [NotNull] out T Constant, T Value) where T : class, ISPWNValue, ICanBeConstant, ICanBeMutable
         {
             //if (VariableName == null) throw new ArgumentNullException(null, nameof(VariableName));
             var newvar = new Variable<T>(Value, VariableName);
-            ISPWNCode code = newvar.Init(out Variable);
+            ISPWNCode code = newvar.InitConstant(out Constant);
+            return code;
+        }
+        public static ISPWNCode CreateMutableVariable<T>(string VariableName, [NotNull] out Variable<T> Variable, T Value) where T : class, ISPWNValue, ICanBeMutable
+        {
+            //if (VariableName == null) throw new ArgumentNullException(null, nameof(VariableName));
+            var newvar = new Variable<T>(Value, VariableName);
+            ISPWNCode code = newvar.InitMutable(out Variable);
             return code;
         }
     }
@@ -84,10 +93,16 @@ namespace SPWN.Basics
             SPWNCodes.Add(new SPWNCodeParallel(AnotherSPWNCode));
             return SPWNCodes;
         }
-        public static ISPWNCode Init<T>(this Variable<T> Variable, out T Value)
-        where T : class, ISPWNValue
+        public static ISPWNCode InitMutable<T>(this Variable<T> Variable, [NotNull] out Variable<T> VariableToGetValue)
+        where T : class, ISPWNValue, ICanBeMutable
         {
-            Value = Variable.AsValue();
+            VariableToGetValue = Variable;
+            return Variable.GetInitializationCode();
+        }
+        public static ISPWNCode InitConstant<T>(this Variable<T> Variable, [NotNull] out T Value)
+        where T : class, ISPWNValue, ICanBeConstant, ICanBeMutable
+        {
+            Value = Variable.Value;
             return Variable.GetInitializationCode();
         }
         public static ISPWNCode InitModule(this Variable<DataTypes.Module> Variable, out Variable<DataTypes.Module> Value)
@@ -111,6 +126,10 @@ namespace SPWN.Basics
             {
                 this.MethodName = MethodName;
             }
+            public SPWNMethodCallBuilder(string ValueAsString, string MethodName)
+            {
+                this.MethodName = $"{ValueAsString}.{MethodName}";
+            }
             public SPWNMethodCallBuilder AddParameter<T>(string ParamName, T? Value) where T : ISPWNValue
             {
                 if (Value == null) goto Return;
@@ -118,7 +137,7 @@ namespace SPWN.Basics
             Return:
                 return this;
             }
-            public SPWNMethodCallBuilder AddParameter(string ParamName, Enum Value)
+            public SPWNMethodCallBuilder AddParameter(string ParamName, Enum? Value)
             {
                 if (Value == null) goto Return;
                 ParamList.Add($"{ParamName} = {Value}");
@@ -142,13 +161,18 @@ namespace SPWN.InternalImplementation
     {
         public string CreateCode();
     }
-    public interface ISPWNVariable
-    {
-        ISPWNCode GetInitializationCode();
-    }
+    
     public interface ISPWNValue
     {
         string ValueAsString { get; }
+    }
+    public interface ICanBeConstant
+    {
+        
+    }
+    public interface ICanBeMutable
+    {
+
     }
     public interface ISPWNExpr<T> where T : ISPWNValue
     {

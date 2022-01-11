@@ -1,0 +1,35 @@
+﻿namespace SPWN.DataTypes;
+
+using Basics;
+using InternalImplementation;
+using static Basics.Extensions;
+public class Item : ISPWNValue, IRangeImplemented, IPulseAble, ICanBeConstant, ICanBeMutable
+{
+    public string ValueAsString { get; set; }
+
+    private Item() => ValueAsString = "?i";
+    public Item(uint GroupId) => ValueAsString = $"{GroupId}i";
+    public Item(ISPWNExpr<Group> Value) => ValueAsString = Value.CreateCode().AddParenthesis();
+
+    public static Item NextFree() => new();
+    public static Item FromId(uint GroupId) => new(GroupId);
+
+    public static implicit operator Item(uint Value) => new(Value);
+
+    public ISPWNCode Add(Number Amount)
+        => new SPWNMethodCallBuilder($"{ValueAsString}.add")
+        .AddParameter("amount", Amount)
+        .Build();
+
+    public ISPWNExpr<Event> Count(Number? Number = null)
+        => new SPWNMethodCallBuilder($"{ValueAsString}.count")
+        .AddParameter("number", Number)
+        .BuildExpr<Event>();
+
+    public ISPWNCode IfIs(Comparisons Comparison,Number Other, TriggerFunction Function)
+        => new SPWNMethodCallBuilder($"{ValueAsString}.if_is")
+        .AddParameter("comparison", Comparison)
+        .AddParameter("other", Other)
+        .AddParameter("function", Function)
+        .Build();
+}

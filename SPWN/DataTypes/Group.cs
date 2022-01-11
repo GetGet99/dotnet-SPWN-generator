@@ -4,7 +4,7 @@ using SPWN.Basics;
 using SPWN.InternalImplementation;
 using CodeAnalysis = System.Diagnostics.CodeAnalysis;
 using static SPWN.Basics.Extensions;
-public class Group : ISPWNValue, IRangeImplemented, IPulseAble
+public class Group : ISPWNValue, IRangeImplemented, IPulseAble, ICanBeConstant, ICanBeMutable
 {
     public string ValueAsString { get; set; }
 
@@ -104,7 +104,7 @@ public class Group : ISPWNValue, IRangeImplemented, IPulseAble
      * <param name="Easing">Easting type (Default: NONE)</param>
      * <param name="EasingRate">Easting rate (Default: 2)</param>
      */
-    public ISPWNCode MoveTo(Group Target, Number? Duration = null, Boolean? XOnly = null, Boolean? YOnly = null, EasingTypes Easing = EasingTypes.NONE, Number? EasingRate = null)
+    public ISPWNCode MoveTo(Group Target, Number? Duration = null, Boolean? XOnly = null, Boolean? YOnly = null, EasingTypes? Easing = null, Number? EasingRate = null)
         => new SPWNMethodCallBuilder($"{ValueAsString}.move_to")
         .AddParameter("target", Target)
         .AddParameter("duration", Duration)
@@ -125,7 +125,7 @@ public class Group : ISPWNValue, IRangeImplemented, IPulseAble
      * <param name="Easing">Easting type (Default: NONE)</param>
      * <param name="EasingRate">Easting rate (Default: 2)</param>
      */
-    public ISPWNCode MoveTo(Number? X = null, Number? Y = null, Number? Duration = null, EasingTypes Easing = EasingTypes.NONE, Number? EasingRate = null)
+    public ISPWNCode MoveTo(Number? X = null, Number? Y = null, Number? Duration = null, EasingTypes? Easing = null, Number? EasingRate = null)
         => MoveToXY(X: X, Y: Y, Duration: Duration, Easing: Easing, EasingRate: EasingRate);
 
     /**
@@ -137,7 +137,7 @@ public class Group : ISPWNValue, IRangeImplemented, IPulseAble
      * <param name="Easing">Easting type (Default: NONE)</param>
      * <param name="EasingRate">Easting rate (Default: 2)</param>
      */
-    public ISPWNCode MoveTo(System.Drawing.PointF Point, Number? Duration = null, EasingTypes Easing = EasingTypes.NONE, Number? EasingRate = null)
+    public ISPWNCode MoveTo(System.Drawing.PointF Point, Number? Duration = null, EasingTypes? Easing = null, Number? EasingRate = null)
         => MoveToXY(X: Point.X, Y: Point.Y, Duration: Duration, Easing: Easing, EasingRate: EasingRate);
 
     /**
@@ -150,7 +150,7 @@ public class Group : ISPWNValue, IRangeImplemented, IPulseAble
      * <param name="Easing">Easting type (Default: NONE)</param>
      * <param name="EasingRate">Easting rate (Default: 2)</param>
      */
-    public ISPWNCode MoveToXY(Number? X = null, Number? Y = null, Number? Duration = null, EasingTypes Easing = EasingTypes.NONE, Number? EasingRate = null)
+    public ISPWNCode MoveToXY(Number? X = null, Number? Y = null, Number? Duration = null, EasingTypes? Easing = null, Number? EasingRate = null)
         => new SPWNMethodCallBuilder($"{ValueAsString}.move_to")
         .AddParameter("x", X)
         .AddParameter("y", Y)
@@ -168,7 +168,7 @@ public class Group : ISPWNValue, IRangeImplemented, IPulseAble
      * <param name="Easing">Easting type (Default: NONE)</param>
      * <param name="EasingRate">Easting rate (Default: 2)</param>
      */
-    public ISPWNCode MoveToXY(System.Drawing.PointF Point, Number? Duration = null, EasingTypes Easing = EasingTypes.NONE, Number? EasingRate = null)
+    public ISPWNCode MoveToXY(System.Drawing.PointF Point, Number? Duration = null, EasingTypes? Easing = null, Number? EasingRate = null)
         => MoveToXY(X: Point.X, Y: Point.Y, Duration: Duration, Easing: Easing, EasingRate: EasingRate);
 
     /**
@@ -182,7 +182,7 @@ public class Group : ISPWNValue, IRangeImplemented, IPulseAble
      * <param name="EasingRate">Easting rate (Default: 2)</param>
      * <param name="Single">Saves groups and objects if the group only contains one object</param>
      */
-    public ISPWNCode PreciseMove(Number X, Number Y, Number? Duration = null, EasingTypes Easing = EasingTypes.NONE, Number? EasingRate = null, Boolean? Single = null)
+    public ISPWNCode PreciseMove(Number X, Number Y, Number? Duration = null, EasingTypes? Easing = null, Number? EasingRate = null, Boolean? Single = null)
         => new SPWNMethodCallBuilder($"{ValueAsString}.move_to")
         .AddParameter("x", X)
         .AddParameter("y", Y)
@@ -201,13 +201,13 @@ public class Group : ISPWNValue, IRangeImplemented, IPulseAble
      * <param name="EasingRate">Easting rate (Default: 2)</param>
      * <param name="Single">Saves groups and objects if the group only contains one object</param>
      */
-    public ISPWNCode PreciseMove(System.Drawing.PointF Point, Number? Duration = null, EasingTypes Easing = EasingTypes.NONE, Number? EasingRate = null, Boolean? Single = null)
+    public ISPWNCode PreciseMove(System.Drawing.PointF Point, Number? Duration = null, EasingTypes? Easing = null, Number? EasingRate = null, Boolean? Single = null)
         => PreciseMove(X: Point.X, Y: Point.Y, Duration: Duration, Easing: Easing, EasingRate: EasingRate, Single: Single);
 
     public ISPWNCode Pulse(Number R, Number G, Number B, Number? FadeIn = null, Number? Hold = null, Number? FadeOut = null, Boolean? Exclusive = null, Boolean? HSVMode = null, Boolean? SaturationChecked = null, Boolean? BrightnessChecked = null)
         => (this as IPulseAble).Pulse(R: R, G: G, B: B, FadeIn: FadeIn, Hold: Hold, FadeOut: FadeOut, Exclusive: Exclusive, HSVMode: HSVMode, SaturationChecked: SaturationChecked, BrightnessChecked: BrightnessChecked);
 
-    public ISPWNCode Rotate(Group Center, Number Degrees, Number? Duration = null, EasingTypes Easing = EasingTypes.NONE, Number? EasingRate = null, Boolean? LockObjectRotation = null)
+    public ISPWNCode Rotate(Group Center, Number Degrees, Number? Duration = null, EasingTypes? Easing = null, Number? EasingRate = null, Boolean? LockObjectRotation = null)
         => new SPWNMethodCallBuilder($"{ValueAsString}.rotate")
         .AddParameter("center", Center)
         .AddParameter("degrees", Degrees)

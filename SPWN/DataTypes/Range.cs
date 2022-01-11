@@ -3,7 +3,7 @@
 using InternalImplementation;
 using Basics;
 
-public class Range<T> : ISPWNValue where T : ISPWNValue, IRangeImplemented
+public class Range<T> : ISPWNValue, ICanBeConstant, ICanBeMutable where T : ISPWNValue, IRangeImplemented
 {
     public string ValueAsString { get; set; }
 

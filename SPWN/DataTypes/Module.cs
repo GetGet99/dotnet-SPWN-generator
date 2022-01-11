@@ -3,7 +3,7 @@
 using InternalImplementation;
 using Basics;
 
-public class Module : ISPWNValue
+public class Module : ISPWNValue, ICanBeConstant, ICanBeMutable
 {
     public string ValueAsString { get; set; } = "";
     public Module() { }

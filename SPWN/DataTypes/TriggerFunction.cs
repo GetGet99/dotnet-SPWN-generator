@@ -2,7 +2,7 @@
 using InternalImplementation;
 using Basics;
 
-public class TriggerFunction : ISPWNValue
+public class TriggerFunction : ISPWNValue, ICanBeConstant, ICanBeMutable
 {
     public string ValueAsString { get; set; }
     public TriggerFunction(SPWNCodes MacroCode) => ValueAsString = $"!{{\n{MacroCode.CreateCodes().IndentOnce()}\n}}";

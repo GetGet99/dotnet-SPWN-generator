@@ -2,7 +2,7 @@
 using SPWN.Basics;
 using SPWN.InternalImplementation;
 using static Basics.Extensions;
-public class Number : ISPWNValue, IRangeImplemented
+public class Number : ISPWNValue, IRangeImplemented, ICanBeConstant, ICanBeMutable
 {
     public string ValueAsString { get; private set; }
     public Number(double Value) => ValueAsString = Value.ToString();
