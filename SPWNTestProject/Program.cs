@@ -2,6 +2,7 @@
 using static SPWN.Basics.Extensions;
 using static SPWN.Basics.SPWNUtils;
 
+// Reference: https://spu7nix.net/spwn/#/triggerlanguage/7selectorpanel
 Generator.PrintToConsole(
     Codes:
     new SPWN.Basics.SPWNCodes
