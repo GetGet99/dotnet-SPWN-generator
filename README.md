@@ -19,7 +19,7 @@ Future Plans:
 
 # Why this project?
 
-If you're a fan of IntelliSense, Typing, or other features avaliable in .NET or .NET editor, using this project might help you.
+If you're a fan of IntelliSense, Typing, or other features avaliable in .NET or .NET editor, using this project might help you. In addition, even if this project is dead, the "wrapper" can be created and custom codes can easily be added (you technically can right now, but will be easier later on. It's part of Future plans.)
 
 # Usage
 See SPWNTestProject for simple example
