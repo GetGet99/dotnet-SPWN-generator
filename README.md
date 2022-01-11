@@ -4,7 +4,7 @@ Simple, incomplete generator that generates SPWN code from .NET 6 code.
 
 # What it can do?
 Currently, it can:
-* Create variables and macros
+* Create basic codes
 * Other simple stuff, but not all methods from SPWN is supported yet
 
 Future Plans:
