@@ -80,6 +80,7 @@ Generator.PrintToConsole(
 
         Comment("starts at first button (index 0)"),
         
+        // While normally you do not need to put "let" when creating Counter, you need to create Mutable Variable here
         CreateMutableVariable("selected",out var selected, new SPWN.DataTypes.Counter(0)),
 
         NewLine(),
