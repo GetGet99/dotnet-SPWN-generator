@@ -8,7 +8,7 @@ public class Range<T> : ISPWNValue, ICanBeConstant, ICanBeMutable where T : ISPW
     public string ValueAsString { get; set; }
 
     public Range(T Start, T End) => ValueAsString = $"{Start.ValueAsString}..{End.ValueAsString}";
-    public Range(ISPWNExpr<Range<T>> Value) => ValueAsString = Value.CreateCode().AddParenthesis();
+    public Range(ISPWNExpr<Range<T>> Value) => ValueAsString = Value.CreateCode();
     public static implicit operator Range<T>((T, T) value) => new(value.Item1, value.Item2);
 }
 public static class Ranges

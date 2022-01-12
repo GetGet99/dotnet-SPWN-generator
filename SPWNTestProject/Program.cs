@@ -1,7 +1,7 @@
 ﻿// Where's public static void Main() Thing? If you're confused: https://aka.ms/new-console-template
 
 using SPWNCreator;
-using static SPWN.Basics.Extensions;
+
 using static SPWN.Basics.SPWNUtils;
 
 // Example 1
@@ -79,26 +79,29 @@ Generator.PrintToConsole(
         NewLine(),
 
         Comment("starts at first button (index 0)"),
-        
-        
+
         CreateConstantVariable("selected",out var selected, SPWN.DataTypes.Counter.FromNumber(0)),
 
         NewLine(),
 
-        // To get the value from the variable, use variable.Value
         gs.ButtonA().OnTriggered(new SPWN.DataTypes.TriggerFunction( new SPWN.Basics.SPWNCodes
         {
             Comment("switch"),
+            // counter.add(num) is the same as counter += num;
             selected.Add(1),
 
-            SPWN.Conditions.If(Expr: selected >= anchors.Length.AsValue(),
-                Do: selected.Reset().End()
+            SPWN.Conditions.If(Expr: selected >= anchors.Length,
+                Do: new SPWN.Basics.SPWNCodes
+                {
+                    // You can't override = operator in C# so we need to use Counter.Assign()
+                    Comment("Cannot override _assign_ in .NET so... have to do this"),
+                    selected.Assign(0)
+                }
             ),
 
             Comment("convert selected to a normal number"),
 
-            CreateConstantVariable("current_anchor", out var current_anchor,
-                anchors[selected.ToConst((0,anchors.Length.AsValue())).AsValue()].AsValue()),
+            CreateConstantVariable("current_anchor", out var current_anchor, anchors[selected.ToConst((0,anchors.Length))]),
 
             selector.MoveTo(current_anchor)
         }))
@@ -118,16 +121,17 @@ selector = 7g
 gs = import gamescene
 
 // starts at first button (index 0)
-selected = counter(0)
+selected = (counter(source = 0))
 
 gs.button_a().on_triggered(function = !{
     // switch
     selected.add(num = 1)
     if selected >= anchors.length {
-        selected.reset()
+        // Cannot override _assign_ in .NET so... have to do this
+        selected._assign_(num = 0)
     }
     // convert selected to a normal number
-    current_anchor = anchors[selected.to_const(0..anchors.length)]
+    current_anchor = (anchors[(selected.to_const(range = 0..anchors.length))])
     selector.move_to(target = current_anchor)
 })
 */

@@ -4,8 +4,8 @@ using System.Diagnostics.CodeAnalysis;
 using SysColGen = System.Collections.Generic;
 using SPWN.Basics;
 using static System.Linq.Enumerable;
-
-public class Array<Value> : ISPWNValue, ICanBeConstant, ICanBeMutable where Value : ISPWNValue
+using static Basics.Extensions;
+public class Array<Value> : ISPWNValue, ICanBeConstant, ICanBeMutable where Value : class, ISPWNValue
 {
     public Array(SysColGen.IEnumerable<Value> collection) => ValueAsString = $"[{string.Join(",", collection.ToArray().Apply(x => x == null ? "" : x.ValueAsString))}]";
     public Array(ISPWNExpr<Array<Value>> Value) => ValueAsString = Value.CreateCode().AddParenthesis();
@@ -14,7 +14,12 @@ public class Array<Value> : ISPWNValue, ICanBeConstant, ICanBeMutable where Valu
     {
         return new Array<Value>(values);
     }
-    public ISPWNExpr<Number> Length => new StringSPWNExpr<Number>($"{ValueAsString}.length");
+    public Number Length
+        => new SPWNPropertySyntaxBuilder(ValueAsString, "length")
+        .Build<Number>();
 
-    public ISPWNExpr<Value> this[Number n] => new StringSPWNExpr<Value>($"{ValueAsString}[{n.ValueAsString}]");
+    public Value this[Number n]
+        => new SPWNArraySyntaxBuilder(ValueAsString)
+        .AddParameter(n)
+        .Build<Value>();
 }

@@ -12,17 +12,18 @@ namespace SPWN.Basics
     {
 
     }
-    public class SPWNCodes : List<ISPWNCode>
+    public class SPWNCodes : List<SPWNCode>
     {
-        public SPWNCodes(params ISPWNCode[] codes)
+        public SPWNCodes(params SPWNCode[] codes)
         {
             AddRange(codes);
         }
-        public SPWNCodes(Func<IEnumerable<ISPWNCode>> lambda)
+        public SPWNCodes(Func<IEnumerable<SPWNCode>> lambda)
         {
             AddRange(lambda.Invoke());
         }
-        public string CreateCodes()
+
+        public string CreateCode()
         {
             return string.Join("\n", this.Apply(code => code == null ? "// [null command]" : code.CreateCode()));
         }
@@ -30,23 +31,23 @@ namespace SPWN.Basics
 
     public static class SPWNUtils
     {
-        public static ISPWNCode NewLine(ushort times = 1) => new StringSPWNCode(new string('\n',times - 1));
-        public static ISPWNCode Comment(string s) => new StringSPWNCode($"// {s}");
-        public static ISPWNCode RunParallel(ISPWNCode code) => new SPWNCodeParallel(code);
+        public static SPWNCode NewLine(ushort times = 1) => new StringSPWNCode(new string('\n',times - 1));
+        public static SPWNCode Comment(string s) => new StringSPWNCode($"// {s}");
+        public static SPWNCode RunParallel(SPWNCode code) => new SPWNCodeParallel(code);
         //[System.Runtime.CompilerServices.CallerArgumentExpression("Variable")] 
 
-        public static ISPWNCode CreateConstantVariable<T>(string VariableName, [NotNull] out T Constant, T Value) where T : class, ISPWNValue, ICanBeConstant, ICanBeMutable
+        public static SPWNCode CreateConstantVariable<T>(string VariableName, [NotNull] out T Constant, T Value) where T : class, ISPWNValue, ICanBeConstant, ICanBeMutable
         {
             //if (VariableName == null) throw new ArgumentNullException(null, nameof(VariableName));
             var newvar = new Variable<T>(Value, VariableName);
-            ISPWNCode code = newvar.InitConstant(out Constant);
+            SPWNCode code = newvar.InitConstant(out Constant);
             return code;
         }
-        public static ISPWNCode CreateMutableVariable<T>(string VariableName, [NotNull] out Variable<T> Variable, T Value) where T : class, ISPWNValue, ICanBeMutable
+        public static SPWNCode CreateMutableVariable<T>(string VariableName, [NotNull] out Variable<T> Variable, T Value) where T : class, ISPWNValue, ICanBeMutable
         {
             //if (VariableName == null) throw new ArgumentNullException(null, nameof(VariableName));
             var newvar = new Variable<T>(Value, VariableName);
-            ISPWNCode code = newvar.InitMutable(out Variable);
+            SPWNCode code = newvar.InitMutable(out Variable);
             return code;
         }
     }
@@ -73,39 +74,39 @@ namespace SPWN.Basics
         {
             return string.Join(s, objects);
         }
-        public static SPWNCodes ContinueWith(this ISPWNCode SPWNCode, ISPWNCode AnotherSPWNCode) => new()
+        public static SPWNCodes ContinueWith(this SPWNCode SPWNCode, SPWNCode AnotherSPWNCode) => new()
         {
             SPWNCode,
             AnotherSPWNCode
         };
-        public static SPWNCodes End(this ISPWNCode SPWNCode) => new()
+        public static SPWNCodes End(this SPWNCode SPWNCode) => new()
         {
             SPWNCode
         };
         public static SPWNCodes End(this SPWNCodes SPWNCodes) => SPWNCodes;
-        public static SPWNCodes ContinueWith(this SPWNCodes SPWNCodes, ISPWNCode AnotherSPWNCode)
+        public static SPWNCodes ContinueWith(this SPWNCodes SPWNCodes, SPWNCode AnotherSPWNCode)
         {
             SPWNCodes.Add(AnotherSPWNCode);
             return SPWNCodes;
         }
-        public static SPWNCodes ContinueWithNoWait(this SPWNCodes SPWNCodes, ISPWNCode AnotherSPWNCode)
+        public static SPWNCodes ContinueWithNoWait(this SPWNCodes SPWNCodes, SPWNCode AnotherSPWNCode)
         {
             SPWNCodes.Add(new SPWNCodeParallel(AnotherSPWNCode));
             return SPWNCodes;
         }
-        public static ISPWNCode InitMutable<T>(this Variable<T> Variable, [NotNull] out Variable<T> VariableToGetValue)
+        public static SPWNCode InitMutable<T>(this Variable<T> Variable, [NotNull] out Variable<T> VariableToGetValue)
         where T : class, ISPWNValue, ICanBeMutable
         {
             VariableToGetValue = Variable;
             return Variable.GetInitializationCode();
         }
-        public static ISPWNCode InitConstant<T>(this Variable<T> Variable, [NotNull] out T Value)
+        public static SPWNCode InitConstant<T>(this Variable<T> Variable, [NotNull] out T Value)
         where T : class, ISPWNValue, ICanBeConstant, ICanBeMutable
         {
             Value = Variable.Value;
             return Variable.GetInitializationCode();
         }
-        public static ISPWNCode InitModule(this Variable<DataTypes.Module> Variable, out Variable<DataTypes.Module> Value)
+        public static SPWNCode InitModule(this Variable<DataTypes.Module> Variable, out Variable<DataTypes.Module> Value)
         {
             Value = Variable;
             return Variable.GetInitializationCode();
@@ -148,18 +149,88 @@ namespace SPWN.Basics
             {
                 return new StringSPWNCode($"{MethodName}({ParamList.JoinString(",")})");
             }
-            public StringSPWNExpr<T> BuildExpr<T>() where T : ISPWNValue
+            private StringSPWNExpr<T> BuildExpr<T>() where T : ISPWNValue
             {
                 return new StringSPWNExpr<T>($"{MethodName}({ParamList.JoinString(",")})");
+            }
+            public T Build<T>() where T : class, ISPWNValue
+            {
+                return BuildExpr<T>().AsValue();
+            }
+        }
+        public struct SPWNPropertySyntaxBuilder
+        {
+            string MethodName { get; }
+            public SPWNPropertySyntaxBuilder(string MethodName)
+            {
+                this.MethodName = MethodName;
+            }
+            public SPWNPropertySyntaxBuilder(string ValueAsString, string PropertyName)
+            {
+                this.MethodName = $"{ValueAsString}.{PropertyName}";
+            }
+            private StringSPWNExpr<T> BuildExpr<T>() where T : ISPWNValue
+            {
+                return new StringSPWNExpr<T>($"{MethodName}");
+            }
+            public T Build<T>() where T : class, ISPWNValue
+            {
+                return BuildExpr<T>().AsValue();
+            }
+        }
+        public struct SPWNArraySyntaxBuilder
+        {
+            string ValueAsString { get; }
+            List<string> ParamList { get; } = new List<string>();
+            public SPWNArraySyntaxBuilder(string ValueAsString)
+            {
+                this.ValueAsString = ValueAsString;
+            }
+            public SPWNArraySyntaxBuilder AddParameter<T>(string ParamName, T? Value) where T : ISPWNValue
+            {
+                if (Value == null) goto Return;
+                ParamList.Add($"{ParamName} = {Value.ValueAsString}");
+            Return:
+                return this;
+            }
+            public SPWNArraySyntaxBuilder AddParameter(string ParamName, Enum? Value)
+            {
+                if (Value == null) goto Return;
+                ParamList.Add($"{ParamName} = {Value}");
+            Return:
+                return this;
+            }
+            public SPWNArraySyntaxBuilder AddParameter(Enum? Value)
+            {
+                if (Value == null) goto Return;
+                ParamList.Add(Value.ToString());
+            Return:
+                return this;
+            }
+            public SPWNArraySyntaxBuilder AddParameter<T>(T? Value) where T : ISPWNValue
+            {
+                if (Value == null) goto Return;
+                ParamList.Add(Value.ValueAsString);
+            Return:
+                return this;
+            }
+            private StringSPWNExpr<T> BuildExpr<T>() where T : ISPWNValue
+            {
+                return new StringSPWNExpr<T>($"{ValueAsString}[{ParamList.JoinString(",")}]");
+            }
+            public T Build<T>() where T : class, ISPWNValue
+            {
+                return BuildExpr<T>().AsValue();
             }
         }
     }
 }
 namespace SPWN.InternalImplementation
 {
-    public interface ISPWNCode
+    public abstract class SPWNCode
     {
-        public string CreateCode();
+        public abstract string CreateCode();
+        public static implicit operator Basics.SPWNCodes(SPWNCode code) => new(code);
     }
     
     public interface ISPWNValue
@@ -185,18 +256,18 @@ namespace SPWN.InternalImplementation
         public StringSPWNExpr(string Code) => code = Code;
         public string CreateCode() => code;
     }
-    public struct StringSPWNCode : ISPWNCode
+    public class StringSPWNCode : SPWNCode
     {
         readonly string code;
         public StringSPWNCode() => throw new NotImplementedException();
         public StringSPWNCode(string Code) => code = Code;
-        public string CreateCode() => code;
+        public override string CreateCode() => code;
     }
-    public struct SPWNCodeParallel : ISPWNCode
+    public class SPWNCodeParallel : SPWNCode
     {
-        public string CreateCode() => $"-> {CodeToRun.CreateCode()}";
-        ISPWNCode CodeToRun { get; set; }
+        public override string CreateCode() => $"-> {CodeToRun.CreateCode()}";
+        SPWNCode CodeToRun { get; set; }
         public SPWNCodeParallel() => throw new NotImplementedException();
-        public SPWNCodeParallel(ISPWNCode Code) => CodeToRun = Code;
+        public SPWNCodeParallel(SPWNCode Code) => CodeToRun = Code;
     }
 }

@@ -9,17 +9,17 @@ public class Number : ISPWNValue, IRangeImplemented, ICanBeConstant, ICanBeMutab
     public Number(ISPWNExpr<Number> Value) => ValueAsString = Value.CreateCode().AddParenthesis();
     public static implicit operator Number(double d) => new(d);
 
-    public ISPWNExpr<Number> Constrain(Number Min, Number Max)
+    public Number Constrain(Number Min, Number Max)
         => new SPWNMethodCallBuilder($"{ValueAsString}.constrain")
         .AddParameter("min", Min)
         .AddParameter("max", Max)
-        .BuildExpr<Number>();
+        .Build<Number>();
 
-    public ISPWNExpr<Number> Map(Number IStart, Number IStop, Number OStart, Number OStop)
+    public Number Map(Number IStart, Number IStop, Number OStart, Number OStop)
         => new SPWNMethodCallBuilder($"{ValueAsString}.map")
         .AddParameter("istart", IStart)
         .AddParameter("istop", IStop)
         .AddParameter("ostart", OStart)
         .AddParameter("ostop", OStop)
-        .BuildExpr<Number>();
+        .Build<Number>();
 }

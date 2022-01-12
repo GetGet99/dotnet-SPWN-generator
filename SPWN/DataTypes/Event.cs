@@ -9,15 +9,15 @@ public class Event : ISPWNValue, ICanBeConstant, ICanBeMutable
     {
         ValueAsString = Code;
     }
-    public ISPWNCode OnTriggered(TriggerFunction Function)
+    public SPWNCode OnTriggered(TriggerFunction Function)
         => new SPWNMethodCallBuilder($"{ValueAsString}.on_triggered")
         .AddParameter("function", Function)
         .Build();
-    public ISPWNCode OnTriggered(Color Function)
+    public SPWNCode OnTriggered(Color Function)
         => new SPWNMethodCallBuilder($"{ValueAsString}.on_triggered")
         .AddParameter("function", Function)
         .Build();
-    public ISPWNCode OnTriggered(Group Function)
+    public SPWNCode OnTriggered(Group Function)
         => new SPWNMethodCallBuilder($"{ValueAsString}.on_triggered")
         .AddParameter("function", Function)
         .Build();

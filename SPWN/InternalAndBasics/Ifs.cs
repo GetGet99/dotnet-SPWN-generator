@@ -5,8 +5,8 @@ using SPWN.DataTypes;
 
 public static class Conditions
 {
-    public static ISPWNCode If(ISPWNExpr<Boolean> Expr, SPWNCodes Do, SPWNCodes? Else = null) {
-        return new StringSPWNCode($"if {Expr.CreateCode()} {{\n{Do.CreateCodes().IndentOnce()}\n}}" +
-            (Else == null ? "" : $" else {{\n{Else.CreateCodes().IndentOnce()}\n}}"));
+    public static SPWNCode If(ISPWNExpr<Boolean> Expr, SPWNCodes Do, SPWNCodes? Else = null) {
+        return new StringSPWNCode($"if {Expr.CreateCode()} {{\n{Do.CreateCode().IndentOnce()}\n}}" +
+            (Else == null ? "" : $" else {{\n{Else.CreateCode().IndentOnce()}\n}}"));
     }
 }

@@ -16,8 +16,8 @@ class Block : ISPWNValue, IRangeImplemented, IPulseAble, ICanBeConstant, ICanBeM
 
     public static implicit operator Block(uint Value) => new(Value);
 
-    public ISPWNExpr<Item> CreateTrackerItem(Block Other)
+    public Item CreateTrackerItem(Block Other)
         => new SPWNMethodCallBuilder($"{ValueAsString}.CreateTrackerItem")
         .AddParameter("other", Other)
-        .BuildExpr<Item>();
+        .Build<Item>();
 }

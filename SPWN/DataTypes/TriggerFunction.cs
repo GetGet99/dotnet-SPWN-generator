@@ -5,9 +5,9 @@ using Basics;
 public class TriggerFunction : ISPWNValue, ICanBeConstant, ICanBeMutable
 {
     public string ValueAsString { get; set; }
-    public TriggerFunction(SPWNCodes MacroCode) => ValueAsString = $"!{{\n{MacroCode.CreateCodes().IndentOnce()}\n}}";
+    public TriggerFunction(SPWNCodes MacroCode) => ValueAsString = $"!{{\n{MacroCode.CreateCode().IndentOnce()}\n}}";
     public TriggerFunction(ISPWNExpr<TriggerFunction> Value) => ValueAsString = Value.CreateCode().IndentOnce();
-    public ISPWNCode Invoke()
+    public SPWNCode Invoke()
     {
         return new StringSPWNCode($"{ValueAsString}.()");
     }

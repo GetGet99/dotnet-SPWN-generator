@@ -14,6 +14,6 @@ public class Variable<T> : ISPWNExpr<T> where T : class, ISPWNValue, ICanBeMutab
     }
 
     public string CreateCode() => Name;
-    public ISPWNCode GetInitializationCode(bool Mutable = false) => SetNewValue(InitializedValue, Mutable: Mutable);
+    public SPWNCode GetInitializationCode(bool Mutable = false) => SetNewValue(InitializedValue, Mutable: Mutable);
     public StringSPWNCode SetNewValue(T Value, bool Mutable = false) => new ((Mutable ? "let " : "") + $"{Name} = {Value.ValueAsString}");
 }

@@ -6,7 +6,7 @@ namespace SPWN.Basics;
 interface IPulseAble : ISPWNValue
 {
 
-    ISPWNCode Pulse(Number R, Number G, Number B, Number? FadeIn = null, Number? Hold = null, Number? FadeOut = null, Boolean? Exclusive = null, Boolean? HSVMode = null, Boolean? SaturationChecked = null, Boolean? BrightnessChecked = null)
+    SPWNCode Pulse(Number R, Number G, Number B, Number? FadeIn = null, Number? Hold = null, Number? FadeOut = null, Boolean? Exclusive = null, Boolean? HSVMode = null, Boolean? SaturationChecked = null, Boolean? BrightnessChecked = null)
         => new SPWNMethodCallBuilder($"{ValueAsString}.pulse")
         .AddParameter("r", R)
         .AddParameter("g", G)

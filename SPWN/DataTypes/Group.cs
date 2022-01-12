@@ -22,7 +22,7 @@ public class Group : ISPWNValue, IRangeImplemented, IPulseAble, ICanBeConstant, 
      * Implementation of the alpha trigger
      * </summary>
      */
-    public ISPWNCode Alpha(Number? Opacity = null, Number? Duration = null)
+    public SPWNCode Alpha(Number? Opacity = null, Number? Duration = null)
         => new SPWNMethodCallBuilder($"{ValueAsString}.alpha")
         .AddParameter("opacity", Opacity)
         .AddParameter("duration", Duration)
@@ -37,7 +37,7 @@ public class Group : ISPWNValue, IRangeImplemented, IPulseAble, ICanBeConstant, 
      * <param name="YMod">Multiplier for the movement on the Y-axis (Default: 1)</param>
      * <param name="Duration">Duration of following (Default: 999)</param>
      */
-    public ISPWNCode Follow(Group Other, Number? XMod = null, Number? YMod = null, Number? Duration = null)
+    public SPWNCode Follow(Group Other, Number? XMod = null, Number? YMod = null, Number? Duration = null)
         => new SPWNMethodCallBuilder($"{ValueAsString}.follow")
         .AddParameter("other", Other)
         .AddParameter("x_mod", XMod)
@@ -54,7 +54,7 @@ public class Group : ISPWNValue, IRangeImplemented, IPulseAble, ICanBeConstant, 
      * <param name="Weight">??? (Default: 0.5)</param>
      * <param name="Duration">Duration of following (Default: 999)</param>
      */
-    public ISPWNCode FollowLerp(Group GroupA, Group GroupB, Number? Weight = null, Number? Duration = null)
+    public SPWNCode FollowLerp(Group GroupA, Group GroupB, Number? Weight = null, Number? Duration = null)
         => new SPWNMethodCallBuilder($"{ValueAsString}.follow_lerp")
         .AddParameter("groupA", GroupA)
         .AddParameter("groupB", GroupB)
@@ -71,7 +71,7 @@ public class Group : ISPWNValue, IRangeImplemented, IPulseAble, ICanBeConstant, 
      * <param name="MaxSpeed">Maximum speed (Default: 0)</param>
      * <param name="Duration">Duration of following (Default: 999)</param>
      */
-    public ISPWNCode FollowPlayerY(Number? Speed = null, Number? Delay = null, Number? Offset = null, Number? MaxSpeed = null, Number? Duration = null)
+    public SPWNCode FollowPlayerY(Number? Speed = null, Number? Delay = null, Number? Offset = null, Number? MaxSpeed = null, Number? Duration = null)
         => new SPWNMethodCallBuilder($"{ValueAsString}.follow_lerp")
         .AddParameter("speed", Speed)
         .AddParameter("delay", Delay)
@@ -87,7 +87,7 @@ public class Group : ISPWNValue, IRangeImplemented, IPulseAble, ICanBeConstant, 
      * <param name="LockY">Lock to player Y (Default = true)</param>
      * <param name="Duration">Duration of lock (Default = 999)</param>
      */
-    public ISPWNCode LockToPlayer(Boolean? LockX = null, Boolean? LockY = null, Number? Duration = null)
+    public SPWNCode LockToPlayer(Boolean? LockX = null, Boolean? LockY = null, Number? Duration = null)
         => new SPWNMethodCallBuilder($"{ValueAsString}.follow_lerp")
         .AddParameter("lock_x", LockX)
         .AddParameter("lock_y", LockY)
@@ -104,7 +104,7 @@ public class Group : ISPWNValue, IRangeImplemented, IPulseAble, ICanBeConstant, 
      * <param name="Easing">Easting type (Default: NONE)</param>
      * <param name="EasingRate">Easting rate (Default: 2)</param>
      */
-    public ISPWNCode MoveTo(Group Target, Number? Duration = null, Boolean? XOnly = null, Boolean? YOnly = null, EasingTypes? Easing = null, Number? EasingRate = null)
+    public SPWNCode MoveTo(Group Target, Number? Duration = null, Boolean? XOnly = null, Boolean? YOnly = null, EasingTypes? Easing = null, Number? EasingRate = null)
         => new SPWNMethodCallBuilder($"{ValueAsString}.move_to")
         .AddParameter("target", Target)
         .AddParameter("duration", Duration)
@@ -125,7 +125,7 @@ public class Group : ISPWNValue, IRangeImplemented, IPulseAble, ICanBeConstant, 
      * <param name="Easing">Easting type (Default: NONE)</param>
      * <param name="EasingRate">Easting rate (Default: 2)</param>
      */
-    public ISPWNCode MoveTo(Number? X = null, Number? Y = null, Number? Duration = null, EasingTypes? Easing = null, Number? EasingRate = null)
+    public SPWNCode MoveTo(Number? X = null, Number? Y = null, Number? Duration = null, EasingTypes? Easing = null, Number? EasingRate = null)
         => MoveToXY(X: X, Y: Y, Duration: Duration, Easing: Easing, EasingRate: EasingRate);
 
     /**
@@ -137,7 +137,7 @@ public class Group : ISPWNValue, IRangeImplemented, IPulseAble, ICanBeConstant, 
      * <param name="Easing">Easting type (Default: NONE)</param>
      * <param name="EasingRate">Easting rate (Default: 2)</param>
      */
-    public ISPWNCode MoveTo(System.Drawing.PointF Point, Number? Duration = null, EasingTypes? Easing = null, Number? EasingRate = null)
+    public SPWNCode MoveTo(System.Drawing.PointF Point, Number? Duration = null, EasingTypes? Easing = null, Number? EasingRate = null)
         => MoveToXY(X: Point.X, Y: Point.Y, Duration: Duration, Easing: Easing, EasingRate: EasingRate);
 
     /**
@@ -150,7 +150,7 @@ public class Group : ISPWNValue, IRangeImplemented, IPulseAble, ICanBeConstant, 
      * <param name="Easing">Easting type (Default: NONE)</param>
      * <param name="EasingRate">Easting rate (Default: 2)</param>
      */
-    public ISPWNCode MoveToXY(Number? X = null, Number? Y = null, Number? Duration = null, EasingTypes? Easing = null, Number? EasingRate = null)
+    public SPWNCode MoveToXY(Number? X = null, Number? Y = null, Number? Duration = null, EasingTypes? Easing = null, Number? EasingRate = null)
         => new SPWNMethodCallBuilder($"{ValueAsString}.move_to")
         .AddParameter("x", X)
         .AddParameter("y", Y)
@@ -168,7 +168,7 @@ public class Group : ISPWNValue, IRangeImplemented, IPulseAble, ICanBeConstant, 
      * <param name="Easing">Easting type (Default: NONE)</param>
      * <param name="EasingRate">Easting rate (Default: 2)</param>
      */
-    public ISPWNCode MoveToXY(System.Drawing.PointF Point, Number? Duration = null, EasingTypes? Easing = null, Number? EasingRate = null)
+    public SPWNCode MoveToXY(System.Drawing.PointF Point, Number? Duration = null, EasingTypes? Easing = null, Number? EasingRate = null)
         => MoveToXY(X: Point.X, Y: Point.Y, Duration: Duration, Easing: Easing, EasingRate: EasingRate);
 
     /**
@@ -182,7 +182,7 @@ public class Group : ISPWNValue, IRangeImplemented, IPulseAble, ICanBeConstant, 
      * <param name="EasingRate">Easting rate (Default: 2)</param>
      * <param name="Single">Saves groups and objects if the group only contains one object</param>
      */
-    public ISPWNCode PreciseMove(Number X, Number Y, Number? Duration = null, EasingTypes? Easing = null, Number? EasingRate = null, Boolean? Single = null)
+    public SPWNCode PreciseMove(Number X, Number Y, Number? Duration = null, EasingTypes? Easing = null, Number? EasingRate = null, Boolean? Single = null)
         => new SPWNMethodCallBuilder($"{ValueAsString}.move_to")
         .AddParameter("x", X)
         .AddParameter("y", Y)
@@ -201,13 +201,13 @@ public class Group : ISPWNValue, IRangeImplemented, IPulseAble, ICanBeConstant, 
      * <param name="EasingRate">Easting rate (Default: 2)</param>
      * <param name="Single">Saves groups and objects if the group only contains one object</param>
      */
-    public ISPWNCode PreciseMove(System.Drawing.PointF Point, Number? Duration = null, EasingTypes? Easing = null, Number? EasingRate = null, Boolean? Single = null)
+    public SPWNCode PreciseMove(System.Drawing.PointF Point, Number? Duration = null, EasingTypes? Easing = null, Number? EasingRate = null, Boolean? Single = null)
         => PreciseMove(X: Point.X, Y: Point.Y, Duration: Duration, Easing: Easing, EasingRate: EasingRate, Single: Single);
 
-    public ISPWNCode Pulse(Number R, Number G, Number B, Number? FadeIn = null, Number? Hold = null, Number? FadeOut = null, Boolean? Exclusive = null, Boolean? HSVMode = null, Boolean? SaturationChecked = null, Boolean? BrightnessChecked = null)
+    public SPWNCode Pulse(Number R, Number G, Number B, Number? FadeIn = null, Number? Hold = null, Number? FadeOut = null, Boolean? Exclusive = null, Boolean? HSVMode = null, Boolean? SaturationChecked = null, Boolean? BrightnessChecked = null)
         => (this as IPulseAble).Pulse(R: R, G: G, B: B, FadeIn: FadeIn, Hold: Hold, FadeOut: FadeOut, Exclusive: Exclusive, HSVMode: HSVMode, SaturationChecked: SaturationChecked, BrightnessChecked: BrightnessChecked);
 
-    public ISPWNCode Rotate(Group Center, Number Degrees, Number? Duration = null, EasingTypes? Easing = null, Number? EasingRate = null, Boolean? LockObjectRotation = null)
+    public SPWNCode Rotate(Group Center, Number Degrees, Number? Duration = null, EasingTypes? Easing = null, Number? EasingRate = null, Boolean? LockObjectRotation = null)
         => new SPWNMethodCallBuilder($"{ValueAsString}.rotate")
         .AddParameter("center", Center)
         .AddParameter("degrees", Degrees)
@@ -217,15 +217,15 @@ public class Group : ISPWNValue, IRangeImplemented, IPulseAble, ICanBeConstant, 
         .AddParameter("lock_object_rotation", LockObjectRotation)
         .Build();
 
-    public ISPWNCode Stop()
+    public SPWNCode Stop()
         => new SPWNMethodCallBuilder($"{ValueAsString}.stop")
         .Build();
 
-    public ISPWNCode ToggleOff()
+    public SPWNCode ToggleOff()
         => new SPWNMethodCallBuilder($"{ValueAsString}.toggle_off")
         .Build();
 
-    public ISPWNCode ToggleOn()
+    public SPWNCode ToggleOn()
         => new SPWNMethodCallBuilder($"{ValueAsString}.toggle_on")
         .Build();
 }

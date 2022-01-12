@@ -16,17 +16,17 @@ public class Item : ISPWNValue, IRangeImplemented, IPulseAble, ICanBeConstant, I
 
     public static implicit operator Item(uint Value) => new(Value);
 
-    public ISPWNCode Add(Number Amount)
+    public SPWNCode Add(Number Amount)
         => new SPWNMethodCallBuilder($"{ValueAsString}.add")
         .AddParameter("amount", Amount)
         .Build();
 
-    public ISPWNExpr<Event> Count(Number? Number = null)
+    public Event Count(Number? Number = null)
         => new SPWNMethodCallBuilder($"{ValueAsString}.count")
         .AddParameter("number", Number)
-        .BuildExpr<Event>();
+        .Build<Event>();
 
-    public ISPWNCode IfIs(Comparisons Comparison,Number Other, TriggerFunction Function)
+    public SPWNCode IfIs(Comparisons Comparison,Number Other, TriggerFunction Function)
         => new SPWNMethodCallBuilder($"{ValueAsString}.if_is")
         .AddParameter("comparison", Comparison)
         .AddParameter("other", Other)

@@ -16,7 +16,7 @@ public class Color : ISPWNValue, IRangeImplemented, IPulseAble, ICanBeConstant, 
 
     public static implicit operator Color(uint Value) => new(Value);
 
-    public ISPWNCode Set(Number R, Number G, Number B, Number? Duration = null, Number? Opacity = null, Boolean? Blending = null)
+    public SPWNCode Set(Number R, Number G, Number B, Number? Duration = null, Number? Opacity = null, Boolean? Blending = null)
         => new SPWNMethodCallBuilder($"{ValueAsString}.set")
         .AddParameter("r",R)
         .AddParameter("g",G)
