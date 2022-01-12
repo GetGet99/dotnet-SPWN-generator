@@ -80,8 +80,8 @@ Generator.PrintToConsole(
 
         Comment("starts at first button (index 0)"),
         
-        // While normally you do not need to put "let" when creating Counter, you need to create Mutable Variable here
-        CreateMutableVariable("selected",out var selected, new SPWN.DataTypes.Counter(0)),
+        
+        CreateConstantVariable("selected",out var selected, SPWN.DataTypes.Counter.FromNumber(0)),
 
         NewLine(),
 
@@ -89,16 +89,16 @@ Generator.PrintToConsole(
         gs.ButtonA().OnTriggered(new SPWN.DataTypes.TriggerFunction( new SPWN.Basics.SPWNCodes
         {
             Comment("switch"),
-            selected.Value.Add(1),
+            selected.Add(1),
 
-            SPWN.Conditions.If(Expr: selected.Value >= anchors.Length.AsValue(),
-                Do: selected.Value.Reset().End()
+            SPWN.Conditions.If(Expr: selected >= anchors.Length.AsValue(),
+                Do: selected.Reset().End()
             ),
 
             Comment("convert selected to a normal number"),
 
             CreateConstantVariable("current_anchor", out var current_anchor,
-                anchors[selected.Value.ToConst(new SPWN.DataTypes.Range<SPWN.DataTypes.Number>(0,anchors.Length.AsValue())).AsValue()].AsValue()),
+                anchors[selected.ToConst((0,anchors.Length.AsValue())).AsValue()].AsValue()),
 
             selector.MoveTo(current_anchor)
         }))

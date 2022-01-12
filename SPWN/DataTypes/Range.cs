@@ -9,14 +9,36 @@ public class Range<T> : ISPWNValue, ICanBeConstant, ICanBeMutable where T : ISPW
 
     public Range(T Start, T End) => ValueAsString = $"{Start.ValueAsString}..{End.ValueAsString}";
     public Range(ISPWNExpr<Range<T>> Value) => ValueAsString = Value.CreateCode().AddParenthesis();
+    public static implicit operator Range<T>((T, T) value) => new(value.Item1, value.Item2);
+}
+public static class Ranges
+{
+    public class NumberRange : Range<Number>
+    {
+        public NumberRange(ISPWNExpr<Range<Number>> Value) : base(Value)
+        {
 
-    //public static implicit operator Range<Number>(System.Range a)
-    //{
-    //    if (a.Start.IsFromEnd || a.End.IsFromEnd) throw new System.NotImplementedException();
-    //    return new(a.Start.Value, a.End.Value);
-    //}
-    //public static implicit operator Range((Number?, Number) value) => new(value.Item1 ?? 0, value.Item2);
+        }
 
+
+
+        public NumberRange(Number Start, Number End) : base(Start, End)
+        {
+
+        }
+
+        public static implicit operator NumberRange(System.Range sysRange)
+        {
+            if (sysRange.End.IsFromEnd || sysRange.Start.IsFromEnd) throw new System.ArgumentException("Range.Start.IsFromEnd and Range.End.IsFromEnd cannot be true");
+            return new(sysRange.Start.Value, sysRange.End.Value);
+        }
+
+        public static implicit operator NumberRange((Number?, Number) value) => new(value.Item1 ?? 0, value.Item2);
+        public static implicit operator NumberRange((int?, Number) value) => new(value.Item1 ?? 0, value.Item2);
+        public static implicit operator NumberRange((double?, Number) value) => new(value.Item1 ?? 0, value.Item2);
+        public static implicit operator NumberRange((Number?, int) value) => new(value.Item1 ?? 0, value.Item2);
+        public static implicit operator NumberRange((Number?, double) value) => new(value.Item1 ?? 0, value.Item2);
+    }
 }
 public interface IRangeImplemented
 {
