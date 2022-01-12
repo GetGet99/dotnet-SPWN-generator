@@ -1,15 +1,15 @@
 ﻿namespace SPWN.DataTypes;
 
-using Basics;
+using TypeInternal;
 using InternalImplementation;
-using static Basics.Extensions;
+using static Utils.Wrapper.Extension;
 class Block : ISPWNValue, IRangeImplemented, IPulseAble, ICanBeConstant, ICanBeMutable
 {
     public string ValueAsString { get; set; }
 
     private Block() => ValueAsString = "?b";
     public Block(uint GroupId) => ValueAsString = $"{GroupId}b";
-    public Block(ISPWNExpr<Group> Value) => ValueAsString = Value.CreateCode().AddParenthesis();
+    public Block(ISPWNExpr<Group> Value) => ValueAsString = Value.CreateCode();
 
     public static Block NextFree() => new();
     public static Block FromId(uint GroupId) => new(GroupId);

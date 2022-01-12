@@ -1,8 +1,8 @@
-﻿using SPWN.DataTypes;
-using SPWN.InternalImplementation;
-using static SPWN.Basics.Extensions;
+﻿namespace SPWN.DataTypes.TypeInternal;
 
-namespace SPWN.Basics;
+using DataTypes;
+using InternalImplementation;
+using static Utils.Wrapper.Extension;
 interface IPulseAble : ISPWNValue
 {
 

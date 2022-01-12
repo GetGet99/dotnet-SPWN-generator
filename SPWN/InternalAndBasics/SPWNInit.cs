@@ -29,29 +29,6 @@ namespace SPWN.Basics
         }
     }
 
-    public static class SPWNUtils
-    {
-        public static SPWNCode NewLine(ushort times = 1) => new StringSPWNCode(new string('\n',times - 1));
-        public static SPWNCode Comment(string s) => new StringSPWNCode($"// {s}");
-        public static SPWNCode RunParallel(SPWNCode code) => new SPWNCodeParallel(code);
-        //[System.Runtime.CompilerServices.CallerArgumentExpression("Variable")] 
-
-        public static SPWNCode CreateConstantVariable<T>(string VariableName, [NotNull] out T Constant, T Value) where T : class, ISPWNValue, ICanBeConstant, ICanBeMutable
-        {
-            //if (VariableName == null) throw new ArgumentNullException(null, nameof(VariableName));
-            var newvar = new Variable<T>(Value, VariableName);
-            SPWNCode code = newvar.InitConstant(out Constant);
-            return code;
-        }
-        public static SPWNCode CreateMutableVariable<T>(string VariableName, [NotNull] out Variable<T> Variable, T Value) where T : class, ISPWNValue, ICanBeMutable
-        {
-            //if (VariableName == null) throw new ArgumentNullException(null, nameof(VariableName));
-            var newvar = new Variable<T>(Value, VariableName);
-            SPWNCode code = newvar.InitMutable(out Variable);
-            return code;
-        }
-    }
-
     public static partial class Extensions
     {
         public static IEnumerable<TOut> Apply<TIn, TOut>([NotNull] this IEnumerable<TIn> In, [NotNull] Func<TIn?, TOut> Function)
@@ -66,9 +43,37 @@ namespace SPWN.Basics
         {
             return s.Split('\n').Apply(x => $"\t{x}").JoinString("\n");
         }
-        public static string AddParenthesis(this string s)
+        public static string ForceAddParenthesis(this string s)
         {
             return s.Contains(' ') ? $"({s})" : s;
+        }
+        public static string AddParenthesis(this string s)
+        {
+            if (s.StartsWith('(') && s.EndsWith(')'))
+            {
+                var OpenBracketCount = 0;
+                var CloseBracketCount = 0;
+                for (int i = 0; i < s.Length; i++)
+                {
+                    char c = s[i];
+                    if (c == '(') OpenBracketCount++;
+                    if (c == ')') CloseBracketCount++;
+                    if (OpenBracketCount > 0 && OpenBracketCount == CloseBracketCount)
+                        goto Add;
+                }
+                goto DoNotAdd; // Already Has Parenthesis
+            }
+
+            if (!s.Contains(' ')) goto DoNotAdd; // A Variable OR Function Call with 1 args
+            
+            if (System.Text.RegularExpressions.Regex.IsMatch(s, @"^(\w+(\.((\w+\([^\)]*\))|(\w+)))*)$",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase)) goto DoNotAdd; // It's the method call and/or property (not perfect but works most of the time)
+
+            goto Add;
+        Add:
+            return s.ForceAddParenthesis();
+        DoNotAdd:
+            return s;
         }
         public static string JoinString(this IEnumerable<object?> objects, string s)
         {
@@ -119,110 +124,7 @@ namespace SPWN.Basics
             if (constructor.Invoke(new object[] { expr }) is not T toreturn) throw new ArgumentException("Error when creating, returning <null>");
             return toreturn;
         }
-        public struct SPWNMethodCallBuilder
-        {
-            string MethodName { get; }
-            List<string> ParamList { get; } = new List<string>();
-            public SPWNMethodCallBuilder(string MethodName)
-            {
-                this.MethodName = MethodName;
-            }
-            public SPWNMethodCallBuilder(string ValueAsString, string MethodName)
-            {
-                this.MethodName = $"{ValueAsString}.{MethodName}";
-            }
-            public SPWNMethodCallBuilder AddParameter<T>(string ParamName, T? Value) where T : ISPWNValue
-            {
-                if (Value == null) goto Return;
-                ParamList.Add($"{ParamName} = {Value.ValueAsString}");
-            Return:
-                return this;
-            }
-            public SPWNMethodCallBuilder AddParameter(string ParamName, Enum? Value)
-            {
-                if (Value == null) goto Return;
-                ParamList.Add($"{ParamName} = {Value}");
-            Return:
-                return this;
-            }
-            public StringSPWNCode Build()
-            {
-                return new StringSPWNCode($"{MethodName}({ParamList.JoinString(",")})");
-            }
-            private StringSPWNExpr<T> BuildExpr<T>() where T : ISPWNValue
-            {
-                return new StringSPWNExpr<T>($"{MethodName}({ParamList.JoinString(",")})");
-            }
-            public T Build<T>() where T : class, ISPWNValue
-            {
-                return BuildExpr<T>().AsValue();
-            }
-        }
-        public struct SPWNPropertySyntaxBuilder
-        {
-            string MethodName { get; }
-            public SPWNPropertySyntaxBuilder(string MethodName)
-            {
-                this.MethodName = MethodName;
-            }
-            public SPWNPropertySyntaxBuilder(string ValueAsString, string PropertyName)
-            {
-                this.MethodName = $"{ValueAsString}.{PropertyName}";
-            }
-            private StringSPWNExpr<T> BuildExpr<T>() where T : ISPWNValue
-            {
-                return new StringSPWNExpr<T>($"{MethodName}");
-            }
-            public T Build<T>() where T : class, ISPWNValue
-            {
-                return BuildExpr<T>().AsValue();
-            }
-        }
-        public struct SPWNArraySyntaxBuilder
-        {
-            string ValueAsString { get; }
-            List<string> ParamList { get; } = new List<string>();
-            public SPWNArraySyntaxBuilder(string ValueAsString)
-            {
-                this.ValueAsString = ValueAsString;
-            }
-            public SPWNArraySyntaxBuilder AddParameter<T>(string ParamName, T? Value) where T : ISPWNValue
-            {
-                if (Value == null) goto Return;
-                ParamList.Add($"{ParamName} = {Value.ValueAsString}");
-            Return:
-                return this;
-            }
-            public SPWNArraySyntaxBuilder AddParameter(string ParamName, Enum? Value)
-            {
-                if (Value == null) goto Return;
-                ParamList.Add($"{ParamName} = {Value}");
-            Return:
-                return this;
-            }
-            public SPWNArraySyntaxBuilder AddParameter(Enum? Value)
-            {
-                if (Value == null) goto Return;
-                ParamList.Add(Value.ToString());
-            Return:
-                return this;
-            }
-            public SPWNArraySyntaxBuilder AddParameter<T>(T? Value) where T : ISPWNValue
-            {
-                if (Value == null) goto Return;
-                ParamList.Add(Value.ValueAsString);
-            Return:
-                return this;
-            }
-            private StringSPWNExpr<T> BuildExpr<T>() where T : ISPWNValue
-            {
-                return new StringSPWNExpr<T>($"{ValueAsString}[{ParamList.JoinString(",")}]");
-            }
-            public T Build<T>() where T : class, ISPWNValue
-            {
-                return BuildExpr<T>().AsValue();
-            }
-        }
+
     }
 }
 namespace SPWN.InternalImplementation
@@ -232,14 +134,14 @@ namespace SPWN.InternalImplementation
         public abstract string CreateCode();
         public static implicit operator Basics.SPWNCodes(SPWNCode code) => new(code);
     }
-    
+
     public interface ISPWNValue
     {
         string ValueAsString { get; }
     }
     public interface ICanBeConstant
     {
-        
+
     }
     public interface ICanBeMutable
     {

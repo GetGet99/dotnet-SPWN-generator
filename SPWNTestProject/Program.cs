@@ -2,7 +2,7 @@
 
 using SPWNCreator;
 
-using static SPWN.Basics.SPWNUtils;
+using static SPWN.Utils.Extension;
 
 // Example 1
 
@@ -90,7 +90,7 @@ Generator.PrintToConsole(
             // counter.add(num) is the same as counter += num;
             selected.Add(1),
 
-            SPWN.Conditions.If(Expr: selected >= anchors.Length,
+            SPWN.Conditions.If(selected >= anchors.Length,
                 Do: new SPWN.Basics.SPWNCodes
                 {
                     // You can't override = operator in C# so we need to use Counter.Assign()

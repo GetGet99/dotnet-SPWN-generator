@@ -7,7 +7,7 @@ public class Boolean : ISPWNValue
 {
     public Boolean(bool Value) => this.ValueAsString = Value ? "true" : "false";
 
-    public Boolean(ISPWNExpr<Boolean> Value) => ValueAsString = Value.CreateCode().AddParenthesis();
+    public Boolean(ISPWNExpr<Boolean> Value) => ValueAsString = Value.CreateCode();
 
     public string ValueAsString { get; private set; }
    

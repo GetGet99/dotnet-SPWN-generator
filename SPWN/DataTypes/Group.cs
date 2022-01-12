@@ -1,16 +1,15 @@
 ﻿namespace SPWN.DataTypes;
 
-using SPWN.Basics;
+using TypeInternal;
 using SPWN.InternalImplementation;
-using CodeAnalysis = System.Diagnostics.CodeAnalysis;
-using static SPWN.Basics.Extensions;
+using static Utils.Wrapper.Extension;
 public class Group : ISPWNValue, IRangeImplemented, IPulseAble, ICanBeConstant, ICanBeMutable
 {
     public string ValueAsString { get; set; }
 
     private Group() => ValueAsString = "?g";
     public Group(uint GroupId) => ValueAsString = $"{GroupId}g";
-    public Group(ISPWNExpr<Group> Value) => ValueAsString = Value.CreateCode().AddParenthesis();
+    public Group(ISPWNExpr<Group> Value) => ValueAsString = Value.CreateCode();
 
     public static Group NextFree() => new();
     public static Group FromId(uint GroupId) => new(GroupId);
@@ -189,6 +188,7 @@ public class Group : ISPWNValue, IRangeImplemented, IPulseAble, ICanBeConstant, 
         .AddParameter("duration", Duration)
         .AddParameter("easing", Easing)
         .AddParameter("easing_rate", EasingRate)
+        .AddParameter("single", Single)
         .Build();
 
     /**

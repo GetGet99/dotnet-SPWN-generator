@@ -1,15 +1,15 @@
 ﻿namespace SPWN.DataTypes;
 
-using Basics;
+using TypeInternal;
 using InternalImplementation;
-using static Basics.Extensions;
+using static Utils.Wrapper.Extension;
 public class Item : ISPWNValue, IRangeImplemented, IPulseAble, ICanBeConstant, ICanBeMutable
 {
     public string ValueAsString { get; set; }
 
     private Item() => ValueAsString = "?i";
     public Item(uint GroupId) => ValueAsString = $"{GroupId}i";
-    public Item(ISPWNExpr<Group> Value) => ValueAsString = Value.CreateCode().AddParenthesis();
+    public Item(ISPWNExpr<Group> Value) => ValueAsString = Value.CreateCode();
 
     public static Item NextFree() => new();
     public static Item FromId(uint GroupId) => new(GroupId);

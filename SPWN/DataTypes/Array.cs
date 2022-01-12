@@ -1,14 +1,15 @@
-﻿namespace SPWN.DataTypes;
-using InternalImplementation;
-using System.Diagnostics.CodeAnalysis;
-using SysColGen = System.Collections.Generic;
-using SPWN.Basics;
+﻿using SysColGen = System.Collections.Generic;
 using static System.Linq.Enumerable;
-using static Basics.Extensions;
+
+namespace SPWN.DataTypes;
+using InternalImplementation;
+using Basics;
+using static Utils.Wrapper.Extension;
+
 public class Array<Value> : ISPWNValue, ICanBeConstant, ICanBeMutable where Value : class, ISPWNValue
 {
     public Array(SysColGen.IEnumerable<Value> collection) => ValueAsString = $"[{string.Join(",", collection.ToArray().Apply(x => x == null ? "" : x.ValueAsString))}]";
-    public Array(ISPWNExpr<Array<Value>> Value) => ValueAsString = Value.CreateCode().AddParenthesis();
+    public Array(ISPWNExpr<Array<Value>> Value) => ValueAsString = Value.CreateCode();
     public string ValueAsString { get; set; }
     public static implicit operator Array<Value>(Value[] values)
     {

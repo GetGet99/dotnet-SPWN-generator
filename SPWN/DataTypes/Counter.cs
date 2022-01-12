@@ -1,10 +1,7 @@
 ﻿namespace SPWN.DataTypes;
 using Basics;
 using InternalImplementation;
-using static Basics.Extensions;
-
-using BooleanExpr = InternalImplementation.ISPWNExpr<Boolean>;
-using StrBooleanExpr = InternalImplementation.StringSPWNExpr<Boolean>;
+using static Utils.Wrapper.Extension;
 
 public class Counter : ISPWNValue, ICanBeMutable, ICanBeConstant
 {
@@ -29,7 +26,7 @@ public class Counter : ISPWNValue, ICanBeMutable, ICanBeConstant
         .AddParameter("reset", Reset)
         .Build<Counter>().ValueAsString;
 
-    public Counter(ISPWNExpr<Counter> Value) => ValueAsString = Value.CreateCode().AddParenthesis();
+    public Counter(ISPWNExpr<Counter> Value) => ValueAsString = Value.CreateCode();
     protected Counter(string ValueAsString) => this.ValueAsString = ValueAsString;
 
     /**
@@ -101,15 +98,15 @@ public class Counter : ISPWNValue, ICanBeMutable, ICanBeConstant
 
     //public ISPWNCode SetTo(Number n) => new StringSPWNCode($"{ValueAsString} = {n.ValueAsString}");
 
-    public BooleanExpr IsGreaterThan(Number n) => new StrBooleanExpr($"{ValueAsString} > {n.ValueAsString}");
-    public BooleanExpr IsGreaterThanOrEqual(Number n) => new StrBooleanExpr($"{ValueAsString} >= {n.ValueAsString}");
-    public BooleanExpr IsLessThan(Number n) => new StrBooleanExpr($"{ValueAsString} < {n.ValueAsString}");
-    public BooleanExpr IsLessThanOrEqual(Number n) => new StrBooleanExpr($"{ValueAsString} <= {n.ValueAsString}");
+    public Boolean IsGreaterThan(Number n) => new SPWNOperatorOverloadBuilder(">" ,this, n).Build<Boolean>();
+    public Boolean IsGreaterThanOrEqual(Number n) => new SPWNOperatorOverloadBuilder(">=", this, n).Build<Boolean>();
+    public Boolean IsLessThan(Number n) => new SPWNOperatorOverloadBuilder("<", this, n).Build<Boolean>();
+    public Boolean IsLessThanOrEqual(Number n) => new SPWNOperatorOverloadBuilder("<=", this, n).Build<Boolean>();
 
-    public static BooleanExpr operator >(Counter c, Number other) => c.IsGreaterThan(other);
-    public static BooleanExpr operator >=(Counter c, Number other) => c.IsGreaterThanOrEqual(other);
-    public static BooleanExpr operator <(Counter c, Number other) => c.IsLessThan(other);
-    public static BooleanExpr operator <=(Counter c, Number other) => c.IsLessThanOrEqual(other);
+    public static Boolean operator >(Counter c, Number other) => c.IsGreaterThan(other);
+    public static Boolean operator >=(Counter c, Number other) => c.IsGreaterThanOrEqual(other);
+    public static Boolean operator <(Counter c, Number other) => c.IsLessThan(other);
+    public static Boolean operator <=(Counter c, Number other) => c.IsLessThanOrEqual(other);
     public Number ToConst(Range<Number> Range)
         => new SPWNMethodCallBuilder(ValueAsString, "to_const")
         .AddParameter("range", Range)
@@ -121,7 +118,7 @@ public class Counter : ISPWNValue, ICanBeMutable, ICanBeConstant
     {
 
         public BooleanCounter(Boolean Source, Boolean? Reset = null) : base(Source, 1, Reset) { }
-        public BooleanCounter(ISPWNExpr<BooleanCounter> Value) : base(Value.CreateCode().AddParenthesis()) { }
+        public BooleanCounter(ISPWNExpr<BooleanCounter> Value) : base(Value.CreateCode()) { }
         public SPWNCode Assign(Boolean Num)
             => new SPWNMethodCallBuilder(ValueAsString, "_assign_")
             .AddParameter("num", Num)
@@ -140,7 +137,7 @@ public class Counter : ISPWNValue, ICanBeMutable, ICanBeConstant
           * <param name="NumberOfBits">Should NOT be 1</param>
           */
         public NumberCounter(Item Source, Number? NumberOfBits = null, Boolean? Reset = null) : base(Source, NumberOfBits, Reset) { }
-        public NumberCounter(ISPWNExpr<NumberCounter> Value) : base(Value.CreateCode().AddParenthesis()) { }
+        public NumberCounter(ISPWNExpr<NumberCounter> Value) : base(Value.CreateCode()) { }
 
         public SPWNCode Assign(Number Num)
             => new SPWNMethodCallBuilder(ValueAsString, "_assign_")

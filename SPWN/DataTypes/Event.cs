@@ -1,6 +1,6 @@
 ﻿namespace SPWN.DataTypes;
 using InternalImplementation;
-using static Basics.Extensions;
+using static Utils.Wrapper.Extension;
 
 public class Event : ISPWNValue, ICanBeConstant, ICanBeMutable
 {

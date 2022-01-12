@@ -1,15 +1,15 @@
 ﻿namespace SPWN.DataTypes;
 
-using Basics;
+using TypeInternal;
 using InternalImplementation;
-using static Basics.Extensions;
+using static Utils.Wrapper.Extension;
 public class Color : ISPWNValue, IRangeImplemented, IPulseAble, ICanBeConstant, ICanBeMutable
 {
     public string ValueAsString { get; set; }
 
     private Color() => ValueAsString = "?c";
     public Color(uint GroupId) => ValueAsString = $"{GroupId}c";
-    public Color(ISPWNExpr<Group> Value) => ValueAsString = Value.CreateCode().AddParenthesis();
+    public Color(ISPWNExpr<Group> Value) => ValueAsString = Value.CreateCode();
 
     public static Color NextFree() => new();
     public static Color FromId(uint GroupId) => new(GroupId);
