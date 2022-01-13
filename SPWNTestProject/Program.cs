@@ -49,13 +49,19 @@ Generator.PrintToConsole(
 // You can implicitly casting C# Array into SPWN.DataTypes.Array, just like this
 SPWN.DataTypes.Array<SPWN.DataTypes.Group> ArrayOfGroups = new SPWN.DataTypes.Group[] { 1, 2, 3, 4, 5, 6 };
 
+// I define this variable for the example later on;
+uint Number = 0;
+
 Generator.PrintToConsole(
     Codes:
     new SPWN.Basics.SPWNCodes
     {
+        
         Comment("Example 2"),
         NewLine(),
 
+        // Also... in the real code, you probably won't use Comment() method that much. Comment is used here since I try to recreate the code
+        // That I put as the reference
         Comment("Groups of the objects that decide the position of"),
         Comment("our buttons"),
 
@@ -68,8 +74,21 @@ Generator.PrintToConsole(
         Comment("Group of the object that indicates which"),
         Comment("button is currently selected"),
 
-        // You can ALSO Create SPWN variable without initializing value on the top
-        CreateConstantVariable("selector", out var selector, SPWN.DataTypes.Group.FromId(7)),
+        // If you would like, you can run .NET code in the middle. NOTE THAT .NET CODE WILL NOT BE TRANSLATED TO SPWN CODE. IT WILL BE RUN IN C# RUNTIME ONLY.
+        // RunDotNetCode(Action) is used if you do not need to use any variables inside.
+        // RunDotNetCode(Func<SPWNCode>) is used if you need to create a SPWN code but would like to use the variable inside temperary.
+        RunDotNetCode(delegate
+        {
+            // You can use any C# code work outside of SPWN context
+            // Do any crazy things here you want
+            var str = "7";
+            var byteAray = System.Text.Encoding.UTF8.GetBytes(str);
+            var backToStrJustForExamplePurpose = System.Text.Encoding.UTF8.GetString(byteAray);
+
+            Number = System.Convert.ToUInt32(backToStrJustForExamplePurpose);
+        }),
+
+        CreateConstantVariable("selector", out var selector, SPWN.DataTypes.Group.FromId(Number)),
 
         NewLine(),
 
@@ -77,9 +96,11 @@ Generator.PrintToConsole(
         CreateConstantVariable("gs", out var gs, new SPWN.Libraries.Gamescene()),
 
         NewLine(),
+        
 
         Comment("starts at first button (index 0)"),
 
+        // You can ALSO Create SPWN variable without initializing value on the top
         CreateConstantVariable("selected",out var selected, SPWN.DataTypes.Counter.FromNumber(0)),
 
         NewLine(),
@@ -116,12 +137,13 @@ anchors = [1g,2g,3g,4g,5g,6g]
 
 // Group of the object that indicates which
 // button is currently selected
+// [null command]
 selector = 7g
 
 gs = import gamescene
 
 // starts at first button (index 0)
-selected = (counter(source = 0))
+selected = counter(source = 0)
 
 gs.button_a().on_triggered(function = !{
     // switch
@@ -131,7 +153,7 @@ gs.button_a().on_triggered(function = !{
         selected._assign_(num = 0)
     }
     // convert selected to a normal number
-    current_anchor = (anchors[(selected.to_const(range = 0..anchors.length))])
+    current_anchor = anchors[selected.to_const(range = 0..anchors.length)]
     selector.move_to(target = current_anchor)
 })
 */

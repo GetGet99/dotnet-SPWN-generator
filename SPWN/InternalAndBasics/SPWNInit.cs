@@ -12,9 +12,9 @@ namespace SPWN.Basics
     {
 
     }
-    public class SPWNCodes : List<SPWNCode>
+    public class SPWNCodes : List<SPWNCode?>
     {
-        public SPWNCodes(params SPWNCode[] codes)
+        public SPWNCodes(params SPWNCode?[] codes)
         {
             AddRange(codes);
         }
@@ -151,18 +151,37 @@ namespace SPWN.InternalImplementation
     {
         public string CreateCode();
     }
-    public struct StringSPWNExpr<T> : ISPWNExpr<T> where T : ISPWNValue
+    struct StringSPWNExpr<T> : ISPWNExpr<T> where T : ISPWNValue
     {
         readonly string code;
         public StringSPWNExpr() => throw new NotImplementedException();
         public StringSPWNExpr(string Code) => code = Code;
         public string CreateCode() => code;
     }
-    public class StringSPWNCode : SPWNCode
+    // Only use internally
+    class StringSPWNCode : SPWNCode
     {
         readonly string code;
-        public StringSPWNCode() => throw new NotImplementedException();
         public StringSPWNCode(string Code) => code = Code;
+        public override string CreateCode() => code;
+    }
+    public class UnsafeStringSPWNCode : SPWNCode
+    {
+        /**
+         * <summary>
+         * By using the UnsafeStringSPWNCode, you agree that the code might come out as unexpected. And you can inject any code you want.
+         * Even if it does not have correct syntax.
+         * </summary>
+         */
+        static bool AllowUnsafeCodeFromString { get; set; } = false;
+        readonly string code;
+        public UnsafeStringSPWNCode(string Code)
+        {
+            if (!AllowUnsafeCodeFromString) throw new NotSupportedException("You should avoid using UnsafeCodeFromString class, as it can inject any code you want. " +
+                "Even if it does not have a correct Syntax\n" +
+                "If you're sure about using this, set UnsafeStringSPWNCode.AllowUnsafeCodeFromString to true");
+            code = Code;
+        }
         public override string CreateCode() => code;
     }
     public class SPWNCodeParallel : SPWNCode

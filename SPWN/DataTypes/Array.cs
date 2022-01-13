@@ -10,7 +10,9 @@ public class Array<Value> : ISPWNValue, ICanBeConstant, ICanBeMutable where Valu
 {
     public Array(SysColGen.IEnumerable<Value> collection) => ValueAsString = $"[{string.Join(",", collection.ToArray().Apply(x => x == null ? "" : x.ValueAsString))}]";
     public Array(ISPWNExpr<Array<Value>> Value) => ValueAsString = Value.CreateCode();
-    public string ValueAsString { get; set; }
+    protected Array() { }
+
+    public string ValueAsString { get; set; } = "";
     public static implicit operator Array<Value>(Value[] values)
     {
         return new Array<Value>(values);
@@ -20,7 +22,14 @@ public class Array<Value> : ISPWNValue, ICanBeConstant, ICanBeMutable where Valu
         .Build<Number>();
 
     public Value this[Number n]
-        => new SPWNArraySyntaxBuilder(ValueAsString)
+    {
+        get => new SPWNArraySyntaxBuilder(ValueAsString)
         .AddParameter(n)
         .Build<Value>();
+    }
+}
+public class Array : Array<ISPWNValue>
+{
+    public Array(SysColGen.IEnumerable<ISPWNValue> collection) : base(collection) { }
+    public Array(ISPWNExpr<Array> Value) => ValueAsString = Value.CreateCode();
 }

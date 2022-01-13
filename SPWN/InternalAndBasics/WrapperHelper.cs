@@ -33,7 +33,7 @@ public partial class Extension
         Return:
             return this;
         }
-        public StringSPWNCode Build()
+        public SPWNCode Build()
         {
             return new StringSPWNCode($"{MethodName}({ParamList.JoinString(",")})");
         }
