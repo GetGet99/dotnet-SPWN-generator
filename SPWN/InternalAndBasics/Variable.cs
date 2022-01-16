@@ -1,7 +1,9 @@
 ﻿namespace SPWN.Basics;
+
+using SPWN.DataTypes.Base;
 using SPWN.InternalImplementation;
 
-public class Variable<T> : ISPWNExpr<T> where T : class, ISPWNValue, ICanBeMutable
+public class Variable<T> : SPWNExpr<T> where T : SPWNValueBase
 {
     public string Name { get; set; }
     public T Value => this.AsValue();
@@ -13,7 +15,17 @@ public class Variable<T> : ISPWNExpr<T> where T : class, ISPWNValue, ICanBeMutab
         InitializedValue = Value;
     }
 
-    public string CreateCode() => Name;
-    public SPWNCode GetInitializationCode(bool Mutable = false) => SetNewValue(InitializedValue, Mutable: Mutable);
-    public SPWNCode SetNewValue(T Value, bool Mutable = false) => new StringSPWNCode((Mutable ? "let " : "") + $"{Name} = {Value.ValueAsString}");
+    public override string CreateCode() => Name;
+    public SPWNCode GetInitializationCode(bool Mutable = false)
+    {
+        var code = new StringSPWNCode((Mutable ? "let " : "") + $"{Name} = {Value.ValueAsString}");
+        code.AddTypeMentioned<T>();
+        return code;
+    }
+    public SPWNCode SetNewValue(T Value)
+    {
+        var code = new StringSPWNCode($"{Name} = {Value.ValueAsString}");
+        code.AddTypeMentioned<T>();
+        return code;
+    }
 }

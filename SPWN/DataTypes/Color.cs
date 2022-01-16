@@ -1,15 +1,16 @@
 ﻿namespace SPWN.DataTypes;
 
-using TypeInternal;
 using InternalImplementation;
-using static Utils.Wrapper.Extension;
-public class Color : ISPWNValue, IRangeImplemented, IPulseAble, ICanBeConstant, ICanBeMutable
+using Utils.Wrapper;
+using Base;
+[SPWNType("@color")]
+public class Color : SPWNValueBase, IRangeImplemented, IPulseAble<Color>, ICanBeConstant, ICanBeMutable
 {
-    public string ValueAsString { get; set; }
+    public override string ValueAsString { get; protected set; }
 
     private Color() => ValueAsString = "?c";
     public Color(uint GroupId) => ValueAsString = $"{GroupId}c";
-    public Color(ISPWNExpr<Group> Value) => ValueAsString = Value.CreateCode();
+    public Color(SPWNExpr<Group> Value) => ValueAsString = Value.CreateCode();
 
     public static Color NextFree() => new();
     public static Color FromId(uint GroupId) => new(GroupId);
@@ -17,7 +18,7 @@ public class Color : ISPWNValue, IRangeImplemented, IPulseAble, ICanBeConstant, 
     public static implicit operator Color(uint Value) => new(Value);
 
     public SPWNCode Set(Number R, Number G, Number B, Number? Duration = null, Number? Opacity = null, Boolean? Blending = null)
-        => new SPWNMethodCallBuilder($"{ValueAsString}.set")
+        => new SPWNMethodCallBuilder<Block>($"{ValueAsString}.set")
         .AddParameter("r",R)
         .AddParameter("g",G)
         .AddParameter("b",B)
@@ -25,4 +26,6 @@ public class Color : ISPWNValue, IRangeImplemented, IPulseAble, ICanBeConstant, 
         .AddParameter("opacity",Opacity)
         .AddParameter("blending",Blending)
         .Build();
+    public SPWNCode Pulse(Number R, Number G, Number B, Number? FadeIn = null, Number? Hold = null, Number? FadeOut = null, Boolean? Exclusive = null, Boolean? HSVMode = null, Boolean? SaturationChecked = null, Boolean? BrightnessChecked = null)
+        => (this as IPulseAble<Color>).Pulse(R: R, G: G, B: B, FadeIn: FadeIn, Hold: Hold, FadeOut: FadeOut, Exclusive: Exclusive, HSVMode: HSVMode, SaturationChecked: SaturationChecked, BrightnessChecked: BrightnessChecked);
 }

@@ -2,13 +2,14 @@
 
 using static SPWN.Basics.Extensions;
 using SPWN.InternalImplementation;
-
-public class Boolean : ISPWNValue
+using Base;
+[SPWNType("@bool")]
+public class Boolean : SPWNValueBase
 {
     public Boolean(bool Value) => this.ValueAsString = Value ? "true" : "false";
 
-    public Boolean(ISPWNExpr<Boolean> Value) => ValueAsString = Value.CreateCode();
+    public Boolean(SPWNExpr<Boolean> Value) => ValueAsString = Value.CreateCode();
 
-    public string ValueAsString { get; private set; }
+    public override string ValueAsString { get; protected set; }
    
 }

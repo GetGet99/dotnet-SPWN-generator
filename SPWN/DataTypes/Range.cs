@@ -2,25 +2,25 @@
 
 using InternalImplementation;
 using Basics;
+using Base;
 
-public class Range<T> : ISPWNValue, ICanBeConstant, ICanBeMutable where T : ISPWNValue, IRangeImplemented
+[SPWNType("@range")]
+public class Range<T> : SPWNValueBase, ICanBeConstant, ICanBeMutable where T : SPWNValueBase, IRangeImplemented
 {
-    public string ValueAsString { get; set; }
+    public override string ValueAsString { get; protected set; }
 
     public Range(T Start, T End) => ValueAsString = $"{Start.ValueAsString}..{End.ValueAsString}";
-    public Range(ISPWNExpr<Range<T>> Value) => ValueAsString = Value.CreateCode();
+    public Range(SPWNExpr<Range<T>> Value) => ValueAsString = Value.CreateCode();
     public static implicit operator Range<T>((T, T) value) => new(value.Item1, value.Item2);
 }
 public static class Ranges
 {
     public class NumberRange : Range<Number>
     {
-        public NumberRange(ISPWNExpr<Range<Number>> Value) : base(Value)
+        public NumberRange(SPWNExpr<Range<Number>> Value) : base(Value)
         {
 
         }
-
-
 
         public NumberRange(Number Start, Number End) : base(Start, End)
         {

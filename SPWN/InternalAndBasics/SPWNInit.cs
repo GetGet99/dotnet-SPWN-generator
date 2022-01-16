@@ -1,19 +1,36 @@
-﻿using System;
+﻿using SPWN.DataTypes;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using SPWN.DataTypes.Base;
 namespace SPWN.Basics
 {
+    using SPWN.DataTypes;
     using SPWN.InternalImplementation;
 
-    public class SPWNLibrary
-    {
-    }
-    public class SPWNClassesImplementation
-    {
+    //public class SPWNLibrary
+    //{
+    //}
+    //public class SPWNClassesImplementation
+    //{
 
-    }
+    //}
     public class SPWNCodes : List<SPWNCode?>
     {
+        public IReadOnlySet<Type> TypesMentioned
+        {
+            get
+            {
+                var list = new HashSet<Type>();
+                foreach (var code in this)
+                {
+                    if (code == null) continue;
+                    foreach (var type in code.TypesMentioned)
+                        list.Add(type);
+                }
+                return list;
+            }
+        }
         public SPWNCodes(params SPWNCode?[] codes)
         {
             AddRange(codes);
@@ -65,7 +82,7 @@ namespace SPWN.Basics
             }
 
             if (!s.Contains(' ')) goto DoNotAdd; // A Variable OR Function Call with 1 args
-            
+
             if (System.Text.RegularExpressions.Regex.IsMatch(s, @"^(\w+(\.((\w+\([^\)]*\))|(\w+)))*)$",
                 System.Text.RegularExpressions.RegexOptions.IgnoreCase)) goto DoNotAdd; // It's the method call and/or property (not perfect but works most of the time)
 
@@ -100,28 +117,27 @@ namespace SPWN.Basics
             return SPWNCodes;
         }
         public static SPWNCode InitMutable<T>(this Variable<T> Variable, [NotNull] out Variable<T> VariableToGetValue)
-        where T : class, ISPWNValue, ICanBeMutable
+        where T : SPWNValueBase, ICanBeMutable
         {
             VariableToGetValue = Variable;
             return Variable.GetInitializationCode();
         }
         public static SPWNCode InitConstant<T>(this Variable<T> Variable, [NotNull] out T Value)
-        where T : class, ISPWNValue, ICanBeConstant, ICanBeMutable
+        where T : SPWNValueBase, ICanBeConstant
         {
             Value = Variable.Value;
             return Variable.GetInitializationCode();
         }
-        public static SPWNCode InitModule(this Variable<DataTypes.Module> Variable, out Variable<DataTypes.Module> Value)
-        {
-            Value = Variable;
-            return Variable.GetInitializationCode();
-        }
-        public static T AsValue<T>(this ISPWNExpr<T> expr) where T : class, ISPWNValue
+
+        public static T AsValue<T>(this SPWNExpr<T> expr) where T : SPWNValueBase
         {
             Type t = typeof(T);
-            var constructor = t.GetConstructor(new Type[] { typeof(ISPWNExpr<T>) });
-            if (constructor == null) throw new ArgumentException("T does not have constructor with T(ISPWNExpr<T>)");
+            var constructor = t.GetConstructor(new Type[] { typeof(SPWNExpr<T>) });
+            if (constructor == null) throw new ArgumentException("T does not have constructor with T(SPWNExpr<T>)");
             if (constructor.Invoke(new object[] { expr }) is not T toreturn) throw new ArgumentException("Error when creating, returning <null>");
+
+            foreach (var type in expr.TypesMentioned) toreturn.AddTypeMentioned(type);
+
             return toreturn;
         }
 
@@ -131,14 +147,16 @@ namespace SPWN.InternalImplementation
 {
     public abstract class SPWNCode
     {
+        public IReadOnlySet<Type> TypesMentioned => _TypesMentioned;
+        private readonly HashSet<Type> _TypesMentioned = new();
+        public void AddTypeMentioned<T>() => AddTypeMentioned(typeof(T));
+        public void AddTypeMentioned(Type t) => _TypesMentioned.Add(t);
+
         public abstract string CreateCode();
         public static implicit operator Basics.SPWNCodes(SPWNCode code) => new(code);
     }
 
-    public interface ISPWNValue
-    {
-        string ValueAsString { get; }
-    }
+    
     public interface ICanBeConstant
     {
 
@@ -147,23 +165,39 @@ namespace SPWN.InternalImplementation
     {
 
     }
-    public interface ISPWNExpr<T> where T : ISPWNValue
+    public abstract class SPWNExpr<T> where T : SPWNValueBase
     {
-        public string CreateCode();
+        public string ValueAsString { get; set; } = "";
+        public IReadOnlySet<Type> TypesMentioned => _TypesMentioned;
+        private readonly HashSet<Type> _TypesMentioned = new();
+        public void AddTypeMentioned<T1>() where T1 : SPWNValueBase
+        {
+            Type t = typeof(T1);
+            _TypesMentioned.Add(t);
+        }
+        public void AddTypeMentioned(Type t)
+        {
+            _TypesMentioned.Add(t);
+        }
+        public abstract string CreateCode();
     }
-    struct StringSPWNExpr<T> : ISPWNExpr<T> where T : ISPWNValue
+    class StringSPWNExpr<T> : SPWNExpr<T> where T : SPWNValueBase
     {
         readonly string code;
         public StringSPWNExpr() => throw new NotImplementedException();
         public StringSPWNExpr(string Code) => code = Code;
-        public string CreateCode() => code;
+        public override string CreateCode() => code;
     }
     // Only use internally
     class StringSPWNCode : SPWNCode
     {
         readonly string code;
         public StringSPWNCode(string Code) => code = Code;
+
+
+
         public override string CreateCode() => code;
+
     }
     public class UnsafeStringSPWNCode : SPWNCode
     {

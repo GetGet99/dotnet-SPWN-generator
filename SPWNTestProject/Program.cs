@@ -2,7 +2,7 @@
 
 using SPWNCreator;
 
-using static SPWN.Utils.Extension;
+using static SPWN.Utils.Basics;
 
 // Example 1
 
@@ -38,7 +38,7 @@ Generator.PrintToConsole(
 /* Code Output:
 // Example 1
 
-1g.follow(other = 2g, duration = 10)
+1g.follow(other = 2g,duration = 10)
 2g.follow(other = 4g)
 -> 1g.follow(other = 3g)
 */

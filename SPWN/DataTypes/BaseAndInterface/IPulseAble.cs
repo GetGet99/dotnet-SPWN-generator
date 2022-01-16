@@ -1,13 +1,13 @@
-﻿namespace SPWN.DataTypes.TypeInternal;
+﻿namespace SPWN.DataTypes.Base;
 
 using DataTypes;
 using InternalImplementation;
-using static Utils.Wrapper.Extension;
-interface IPulseAble : ISPWNValue
+using Utils.Wrapper;
+interface IPulseAble<SPWNType> where SPWNType : SPWNValueBase
 {
-
+    string ValueAsString { get; }
     SPWNCode Pulse(Number R, Number G, Number B, Number? FadeIn = null, Number? Hold = null, Number? FadeOut = null, Boolean? Exclusive = null, Boolean? HSVMode = null, Boolean? SaturationChecked = null, Boolean? BrightnessChecked = null)
-        => new SPWNMethodCallBuilder($"{ValueAsString}.pulse")
+        => new SPWNMethodCallBuilder<SPWNType>($"{ValueAsString}.pulse")
         .AddParameter("r", R)
         .AddParameter("g", G)
         .AddParameter("b", B)

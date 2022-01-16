@@ -1,32 +1,33 @@
 ﻿namespace SPWN.DataTypes;
 using Basics;
 using InternalImplementation;
-using static Utils.Wrapper.Extension;
-
-public class Counter : ISPWNValue, ICanBeMutable, ICanBeConstant
+using Utils.Wrapper;
+using Base;
+[SPWNType("@counter")]
+public class Counter : SPWNValueBase, ICanBeConstant
 {
-    public string ValueAsString { get; private set; }
+    public override string ValueAsString { get; protected set; }
 
     protected Counter(Number Source, Number? NumberOfBits = null, Boolean? Reset = null)
-        => ValueAsString = new SPWNMethodCallBuilder("counter")
+        => ValueAsString = new SPWNMethodCallBuilder<Counter>("counter")
         .AddParameter("source", Source)
         .AddParameter("bits",NumberOfBits)
         .AddParameter("reset",Reset)
         .Build<Counter>().ValueAsString;
     protected Counter(Boolean Source, Number? NumberOfBits = null, Boolean? Reset = null)
-        => ValueAsString = new SPWNMethodCallBuilder("counter")
+        => ValueAsString = new SPWNMethodCallBuilder<Counter>("counter")
         .AddParameter("source", Source)
         .AddParameter("bits", NumberOfBits)
         .AddParameter("reset", Reset)
         .Build<Counter>().ValueAsString;
     protected Counter(Item Source, Number? NumberOfBits = null, Boolean? Reset = null)
-        => ValueAsString = new SPWNMethodCallBuilder("counter")
+        => ValueAsString = new SPWNMethodCallBuilder<Counter>("counter")
         .AddParameter("source", Source)
         .AddParameter("bits", NumberOfBits)
         .AddParameter("reset", Reset)
         .Build<Counter>().ValueAsString;
 
-    public Counter(ISPWNExpr<Counter> Value) => ValueAsString = Value.CreateCode();
+    public Counter(SPWNExpr<Counter> Value) => ValueAsString = Value.CreateCode();
     protected Counter(string ValueAsString) => this.ValueAsString = ValueAsString;
 
     /**
@@ -48,49 +49,49 @@ public class Counter : ISPWNValue, ICanBeMutable, ICanBeConstant
     
 
     public SPWNCode Add(Number Num) =>
-        new SPWNMethodCallBuilder($"{ValueAsString}.add")
+        new SPWNMethodCallBuilder<Counter>($"{ValueAsString}.add")
         .AddParameter("num", Num)
         .Build();
 
     public SPWNCode AddTo(Counter Items) =>
-        new SPWNMethodCallBuilder($"{ValueAsString}.add")
+        new SPWNMethodCallBuilder<Counter>($"{ValueAsString}.add")
         .AddParameter("items", Items)
         .Build();
 
     public SPWNCode AddTo(Item Items) =>
-        new SPWNMethodCallBuilder($"{ValueAsString}.add")
+        new SPWNMethodCallBuilder<Counter>($"{ValueAsString}.add")
         .AddParameter("items", Items)
         .Build();
 
     public SPWNCode AddTo(Array<Counter> Items) =>
-        new SPWNMethodCallBuilder($"{ValueAsString}.add")
+        new SPWNMethodCallBuilder<Counter>($"{ValueAsString}.add")
         .AddParameter("items", Items)
         .Build();
 
     public SPWNCode AddTo(Array<Item> Items) =>
-        new SPWNMethodCallBuilder($"{ValueAsString}.add")
+        new SPWNMethodCallBuilder<Counter>($"{ValueAsString}.add")
         .AddParameter("items", Items)
         .Build();
 
     public SPWNCode AddToMultifactor(Array<Array<Counter>> Items) =>
-        new SPWNMethodCallBuilder($"{ValueAsString}.add")
+        new SPWNMethodCallBuilder<Counter>($"{ValueAsString}.add")
         .AddParameter("items", Items)
         .Build();
 
     public SPWNCode AddToMultifactor(Array<Array<Item>> Items) =>
-        new SPWNMethodCallBuilder($"{ValueAsString}.add")
+        new SPWNMethodCallBuilder<Counter>($"{ValueAsString}.add")
         .AddParameter("items", Items)
         .Build();
 
     public SPWNCode Reset() =>
-        new SPWNMethodCallBuilder($"{ValueAsString}.reset")
+        new SPWNMethodCallBuilder<Counter>($"{ValueAsString}.reset")
         .Build();
 
     public Counter Clone() =>
-        new SPWNMethodCallBuilder($"{ValueAsString}.clone").Build<Counter>();
+        new SPWNMethodCallBuilder<Counter>($"{ValueAsString}.clone").Build<Counter>();
 
     public SPWNCode Assign(Counter Num)
-        => new SPWNMethodCallBuilder(ValueAsString, "_assign_")
+        => new SPWNMethodCallBuilder<Counter>(ValueAsString, "_assign_")
         .AddParameter("num", Num)
         .Build();
     
@@ -98,17 +99,17 @@ public class Counter : ISPWNValue, ICanBeMutable, ICanBeConstant
 
     //public ISPWNCode SetTo(Number n) => new StringSPWNCode($"{ValueAsString} = {n.ValueAsString}");
 
-    public Boolean IsGreaterThan(Number n) => new SPWNOperatorOverloadBuilder(">" ,this, n).Build<Boolean>();
-    public Boolean IsGreaterThanOrEqual(Number n) => new SPWNOperatorOverloadBuilder(">=", this, n).Build<Boolean>();
-    public Boolean IsLessThan(Number n) => new SPWNOperatorOverloadBuilder("<", this, n).Build<Boolean>();
-    public Boolean IsLessThanOrEqual(Number n) => new SPWNOperatorOverloadBuilder("<=", this, n).Build<Boolean>();
+    public Boolean IsGreaterThan(Number n) => new SPWNOperatorOverloadBuilder<Counter>(">" ,this, n).Build<Boolean>();
+    public Boolean IsGreaterThanOrEqual(Number n) => new SPWNOperatorOverloadBuilder<Counter>(">=", this, n).Build<Boolean>();
+    public Boolean IsLessThan(Number n) => new SPWNOperatorOverloadBuilder<Counter>("<", this, n).Build<Boolean>();
+    public Boolean IsLessThanOrEqual(Number n) => new SPWNOperatorOverloadBuilder<Counter>("<=", this, n).Build<Boolean>();
 
     public static Boolean operator >(Counter c, Number other) => c.IsGreaterThan(other);
     public static Boolean operator >=(Counter c, Number other) => c.IsGreaterThanOrEqual(other);
     public static Boolean operator <(Counter c, Number other) => c.IsLessThan(other);
     public static Boolean operator <=(Counter c, Number other) => c.IsLessThanOrEqual(other);
     public Number ToConst(Range<Number> Range)
-        => new SPWNMethodCallBuilder(ValueAsString, "to_const")
+        => new SPWNMethodCallBuilder<Counter>(ValueAsString, "to_const")
         .AddParameter("range", Range)
         .Build<Number>();
     //{
@@ -118,9 +119,9 @@ public class Counter : ISPWNValue, ICanBeMutable, ICanBeConstant
     {
 
         public BooleanCounter(Boolean Source, Boolean? Reset = null) : base(Source, 1, Reset) { }
-        public BooleanCounter(ISPWNExpr<BooleanCounter> Value) : base(Value.CreateCode()) { }
+        public BooleanCounter(SPWNExpr<BooleanCounter> Value) : base(Value.CreateCode()) { }
         public SPWNCode Assign(Boolean Num)
-            => new SPWNMethodCallBuilder(ValueAsString, "_assign_")
+            => new SPWNMethodCallBuilder<Counter>(ValueAsString, "_assign_")
             .AddParameter("num", Num)
             .Build();
 
@@ -137,15 +138,13 @@ public class Counter : ISPWNValue, ICanBeMutable, ICanBeConstant
           * <param name="NumberOfBits">Should NOT be 1</param>
           */
         public NumberCounter(Item Source, Number? NumberOfBits = null, Boolean? Reset = null) : base(Source, NumberOfBits, Reset) { }
-        public NumberCounter(ISPWNExpr<NumberCounter> Value) : base(Value.CreateCode()) { }
+        public NumberCounter(SPWNExpr<NumberCounter> Value) : base(Value.CreateCode()) { }
 
         public SPWNCode Assign(Number Num)
-            => new SPWNMethodCallBuilder(ValueAsString, "_assign_")
+            => new SPWNMethodCallBuilder<Counter>(ValueAsString, "_assign_")
             .AddParameter("num", Num)
             .Build();
 
         public SPWNCode SetTo(Number Num) => Assign(Num);
     }
-
-
 }

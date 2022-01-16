@@ -1,24 +1,25 @@
 ﻿namespace SPWN.DataTypes;
 using InternalImplementation;
-using static Utils.Wrapper.Extension;
-
-public class Event : ISPWNValue, ICanBeConstant, ICanBeMutable
+using Utils.Wrapper;
+using Base;
+[SPWNType("@event")]
+public class Event : SPWNValueBase, ICanBeConstant, ICanBeMutable
 {
-    public string ValueAsString { get; set; }
+    public override string ValueAsString { get; protected set; }
     public Event(string Code)
     {
         ValueAsString = Code;
     }
     public SPWNCode OnTriggered(TriggerFunction Function)
-        => new SPWNMethodCallBuilder($"{ValueAsString}.on_triggered")
+        => new SPWNMethodCallBuilder<Event>($"{ValueAsString}.on_triggered")
         .AddParameter("function", Function)
         .Build();
     public SPWNCode OnTriggered(Color Function)
-        => new SPWNMethodCallBuilder($"{ValueAsString}.on_triggered")
+        => new SPWNMethodCallBuilder<Event>($"{ValueAsString}.on_triggered")
         .AddParameter("function", Function)
         .Build();
     public SPWNCode OnTriggered(Group Function)
-        => new SPWNMethodCallBuilder($"{ValueAsString}.on_triggered")
+        => new SPWNMethodCallBuilder<Event>($"{ValueAsString}.on_triggered")
         .AddParameter("function", Function)
         .Build();
     //{

@@ -3,14 +3,15 @@
 namespace SPWN.DataTypes;
 using InternalImplementation;
 using Basics;
-using static Utils.Wrapper.Extension;
-
-public class Dictionary<Value> : ISPWNValue, ICanBeConstant, ICanBeMutable where Value : class, ISPWNValue
+using Utils.Wrapper;
+using Base;
+[SPWNType("@dictionary")]
+public class Dictionary<Value> : SPWNValueBase, ICanBeConstant, ICanBeMutable where Value : SPWNValueBase
 {
     public Dictionary(SysColGen.Dictionary<string, Value> collection) => ValueAsString = $"{{{string.Join(",", collection.Keys.Apply(x => (x == null) ? "" : $"{x}: {collection[x].ValueAsString}"))}}}";//.ToArray().Apply(x => x == null ? "" : x.ValueAsString))
-    public Dictionary(ISPWNExpr<Dictionary<Value>> Value) => ValueAsString = Value.CreateCode();
+    public Dictionary(SPWNExpr<Dictionary<Value>> Value) => ValueAsString = Value.CreateCode();
     protected Dictionary() { }
-    public string ValueAsString { get; set; } = "";
+    public override string ValueAsString { get; protected set; } = "";
     public static implicit operator Dictionary<Value>(SysColGen.Dictionary<string, Value> values)
     {
         return new Dictionary<Value>(values);
@@ -23,44 +24,44 @@ public class Dictionary<Value> : ISPWNValue, ICanBeConstant, ICanBeMutable where
     }
     
     public SPWNCode Clear()
-        => new SPWNMethodCallBuilder(ValueAsString, "clear")
+        => new SPWNMethodCallBuilder<Dictionary<Value>>(ValueAsString, "clear")
         .Build();
 
     public Boolean ContainsValue(Value Value)
-        => new SPWNMethodCallBuilder(ValueAsString, "contains_value")
+        => new SPWNMethodCallBuilder<Dictionary<Value>>(ValueAsString, "contains_value")
         .AddParameter("value", Value)
         .Build<Boolean>();
 
     public Value Get(String Key, Value? Default = null)
-        => new SPWNMethodCallBuilder(ValueAsString, "get")
+        => new SPWNMethodCallBuilder<Dictionary<Value>>(ValueAsString, "get")
         .AddParameter("key", Key)
         .AddParameter("default", Default)
         .Build<Value>();
 
     public Boolean IsEmpty
-        => new SPWNMethodCallBuilder(ValueAsString, "is_empty")
+        => new SPWNMethodCallBuilder<Dictionary<Value>>(ValueAsString, "is_empty")
         .Build<Boolean>();
 
     public Array<Tuple<String,Value>> Items
-        => new SPWNMethodCallBuilder(ValueAsString, "items")
+        => new SPWNMethodCallBuilder<Dictionary<Value>>(ValueAsString, "items")
         .Build<Array<Tuple<String, Value>>>();
 
     public Array<String> Keys
-        => new SPWNMethodCallBuilder(ValueAsString, "keys")
+        => new SPWNMethodCallBuilder<Dictionary<Value>>(ValueAsString, "keys")
         .Build<Array<String>>();
 
     public Value Set(String Key, Value Value)
-        => new SPWNMethodCallBuilder(ValueAsString, "get")
+        => new SPWNMethodCallBuilder<Dictionary<Value>>(ValueAsString, "get")
         .AddParameter("key", Key)
         .AddParameter("val", Value)
         .Build<Value>();
 
     public Array<String> Values
-        => new SPWNMethodCallBuilder(ValueAsString, "values")
+        => new SPWNMethodCallBuilder<Dictionary<Value>>(ValueAsString, "values")
         .Build<Array<String>>();
 }
-class Dictionary : Dictionary<ISPWNValue>
+class Dictionary : Dictionary<SPWNValueBase>
 {
-    public Dictionary(SysColGen.Dictionary<string, ISPWNValue> collection) : base(collection) { }
-    public Dictionary(ISPWNExpr<Dictionary> Value) => ValueAsString = Value.CreateCode();
+    public Dictionary(SysColGen.Dictionary<string, SPWNValueBase> collection) : base(collection) { }
+    public Dictionary(SPWNExpr<Dictionary> Value) => ValueAsString = Value.CreateCode();
 }

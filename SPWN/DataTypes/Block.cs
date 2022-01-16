@@ -1,15 +1,16 @@
 ﻿namespace SPWN.DataTypes;
 
-using TypeInternal;
+using Base;
 using InternalImplementation;
-using static Utils.Wrapper.Extension;
-class Block : ISPWNValue, IRangeImplemented, IPulseAble, ICanBeConstant, ICanBeMutable
+using Utils.Wrapper;
+[SPWNType("@block")]
+class Block : SPWNValueBase, IRangeImplemented, IPulseAble<Block>, ICanBeConstant, ICanBeMutable
 {
-    public string ValueAsString { get; set; }
+    public override string ValueAsString { get; protected set; }
 
     private Block() => ValueAsString = "?b";
     public Block(uint GroupId) => ValueAsString = $"{GroupId}b";
-    public Block(ISPWNExpr<Group> Value) => ValueAsString = Value.CreateCode();
+    public Block(SPWNExpr<Group> Value) => ValueAsString = Value.CreateCode();
 
     public static Block NextFree() => new();
     public static Block FromId(uint GroupId) => new(GroupId);
@@ -17,7 +18,9 @@ class Block : ISPWNValue, IRangeImplemented, IPulseAble, ICanBeConstant, ICanBeM
     public static implicit operator Block(uint Value) => new(Value);
 
     public Item CreateTrackerItem(Block Other)
-        => new SPWNMethodCallBuilder($"{ValueAsString}.CreateTrackerItem")
+        => new SPWNMethodCallBuilder<Block>($"{ValueAsString}.CreateTrackerItem")
         .AddParameter("other", Other)
         .Build<Item>();
+    public SPWNCode Pulse(Number R, Number G, Number B, Number? FadeIn = null, Number? Hold = null, Number? FadeOut = null, Boolean? Exclusive = null, Boolean? HSVMode = null, Boolean? SaturationChecked = null, Boolean? BrightnessChecked = null)
+        => (this as IPulseAble<Block>).Pulse(R: R, G: G, B: B, FadeIn: FadeIn, Hold: Hold, FadeOut: FadeOut, Exclusive: Exclusive, HSVMode: HSVMode, SaturationChecked: SaturationChecked, BrightnessChecked: BrightnessChecked);
 }
