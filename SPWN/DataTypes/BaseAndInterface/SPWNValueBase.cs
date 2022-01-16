@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 namespace SPWN.DataTypes.Base;
 
-using Utils.Wrapper;
+using Utilities.Wrapper;
 
 [SPWNType("@object")]
 public abstract class SPWNValueBase
@@ -14,7 +14,7 @@ public abstract class SPWNValueBase
     public void AddTypeMentioned<T>() => AddTypeMentioned(typeof(T));
     public void AddTypeMentioned(Type t) => _TypesMentioned.Add(t);
 
-    public String Type
+    public TypeIndicator Type
         => new SPWNPropertySyntaxBuilder<SPWNValueBase>(ValueAsString, "type")
-        .Build<String>();
+        .Build<TypeIndicator>();
 }

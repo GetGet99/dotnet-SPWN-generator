@@ -13,6 +13,10 @@ public class TriggerFunction : SPWNValueBase, ICanBeConstant, ICanBeMutable
         return new StringSPWNCode($"{ValueAsString}.()");
     }
 }
+
+// These Macros will stay temperary
+
+[SPWNType("@macro")]
 public class Macro : SPWNValueBase
 {
     public override string ValueAsString { get; protected set; }
@@ -30,7 +34,7 @@ public class Macro : SPWNValueBase
         return new StringSPWNCode($"{ValueAsString}()");
     }
 }
-
+[SPWNType("@macro")]
 public class MacroAction<T1> : SPWNValueBase where T1 : SPWNValueBase
 {
     public override string ValueAsString { get; protected set; }
@@ -44,6 +48,42 @@ public class MacroAction<T1> : SPWNValueBase where T1 : SPWNValueBase
     {
         return new StringSPWNCode($"{ValueAsString}.({param.ValueAsString})");
     }
+}
+
+// Not implemented yet
+[SPWNType("@macro")]
+public class MacroFunc<TOut> : SPWNValueBase where TOut : SPWNValueBase
+{
+    public override string ValueAsString { get; protected set; }
+    //public MacroFunc(string Var1Name, System.Func<T1, SPWNCodes> MacroCode)
+    //{
+    //    StringSPWNExpr<T1> var1 = new(Var1Name);
+    //    ValueAsString = $"({Var1Name}) {{\n{MacroCode.Invoke(var1.AsValue()).CreateCode().IndentOnce()}\n}}";
+    //}
+    public MacroFunc(SPWNExpr<MacroFunc<TOut>> Value) => ValueAsString = Value.CreateCode().IndentOnce();
+    //public SPWNCode Invoke(T1 param)
+    //{
+    //    return new StringSPWNCode($"{ValueAsString}.({param.ValueAsString})");
+    //}
+}
+
+// Not implemented yet
+[SPWNType("@macro")]
+public class MacroFunc<T1, TOut> : SPWNValueBase
+    where T1 : SPWNValueBase
+    where TOut : SPWNValueBase
+{
+    public override string ValueAsString { get; protected set; }
+    //public MacroFunc(string Var1Name, System.Func<T1, SPWNCodes> MacroCode)
+    //{
+    //    StringSPWNExpr<T1> var1 = new(Var1Name);
+    //    ValueAsString = $"({Var1Name}) {{\n{MacroCode.Invoke(var1.AsValue()).CreateCode().IndentOnce()}\n}}";
+    //}
+    public MacroFunc(SPWNExpr<MacroFunc<T1, TOut>> Value) => ValueAsString = Value.CreateCode().IndentOnce();
+    //public SPWNCode Invoke(T1 param)
+    //{
+    //    return new StringSPWNCode($"{ValueAsString}.({param.ValueAsString})");
+    //}
 }
 //public class MacroAction<T1,T2> : ISPWNValue where T1 : ISPWNValue where T2 : ISPWNValue
 //{

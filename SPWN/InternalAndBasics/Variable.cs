@@ -18,7 +18,7 @@ public class Variable<T> : SPWNExpr<T> where T : SPWNValueBase
     public override string CreateCode() => Name;
     public SPWNCode GetInitializationCode(bool Mutable = false)
     {
-        var code = new StringSPWNCode((Mutable ? "let " : "") + $"{Name} = {Value.ValueAsString}");
+        var code = new StringSPWNCode((Mutable ? "let " : "") + $"{Name} = {InitializedValue.ValueAsString}");
         code.AddTypeMentioned<T>();
         return code;
     }

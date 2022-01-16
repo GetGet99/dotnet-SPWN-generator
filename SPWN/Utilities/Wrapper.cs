@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SPWN.Utils.Wrapper;
+namespace SPWN.Utilities.Wrapper;
 using InternalImplementation;
 using SPWN.DataTypes.Base;
 using static SPWN.Basics.Extensions;
@@ -187,12 +187,6 @@ public struct SPWNOperatorOverloadBuilder<SPWNType> where SPWNType : SPWNValueBa
         Types.Add(t);
         return this;
     }
-    private StringSPWNExpr<T> BuildExpr<T>() where T : SPWNValueBase
-    {
-        return new StringSPWNExpr<T>(ValueAsString);
-    }
-    public T Build<T>() where T : SPWNValueBase
-    {
-        return BuildExpr<T>().AsValue();
-    }
+    private StringSPWNExpr<T> BuildExpr<T>() where T : SPWNValueBase => new (ValueAsString.ForceAddParenthesis());
+    public T Build<T>() where T : SPWNValueBase => BuildExpr<T>().AsValue();
 }

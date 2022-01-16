@@ -1,4 +1,4 @@
-﻿namespace SPWN.Utils.Implementation;
+﻿namespace SPWN.Utilities.Implementation;
 using SPWN.Basics;
 using DataTypes;
 using DataTypes.Base;

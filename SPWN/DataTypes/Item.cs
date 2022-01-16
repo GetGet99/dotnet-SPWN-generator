@@ -1,7 +1,7 @@
 ﻿namespace SPWN.DataTypes;
 
 using InternalImplementation;
-using Utils.Wrapper;
+using Utilities.Wrapper;
 using Base;
 [SPWNType("@item")]
 public class Item : SPWNValueBase, IRangeImplemented, IPulseAble<Item>, ICanBeConstant, ICanBeMutable

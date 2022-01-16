@@ -1,7 +1,7 @@
 ﻿namespace SPWN.DataTypes;
 
 using InternalImplementation;
-using Utils.Wrapper;
+using Utilities.Wrapper;
 using Base;
 [SPWNType("@color")]
 public class Color : SPWNValueBase, IRangeImplemented, IPulseAble<Color>, ICanBeConstant, ICanBeMutable

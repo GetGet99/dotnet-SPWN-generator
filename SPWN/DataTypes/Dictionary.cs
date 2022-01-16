@@ -3,7 +3,7 @@
 namespace SPWN.DataTypes;
 using InternalImplementation;
 using Basics;
-using Utils.Wrapper;
+using Utilities.Wrapper;
 using Base;
 [SPWNType("@dictionary")]
 public class Dictionary<Value> : SPWNValueBase, ICanBeConstant, ICanBeMutable where Value : SPWNValueBase

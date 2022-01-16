@@ -28,3 +28,7 @@ public enum EasingTypes
     SINE_IN_OUT,
     SINE_OUT
 }
+public enum ObjectKeys
+{
+
+}

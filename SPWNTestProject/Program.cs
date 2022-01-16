@@ -2,8 +2,7 @@
 
 using SPWNCreator;
 
-using static SPWN.Utils.Basics;
-
+using static SPWN.Utilities.Basics;
 // Example 1
 
 // Create and Store value in C# variable to Reuse the same value
@@ -157,3 +156,37 @@ gs.button_a().on_triggered(function = !{
     selector.move_to(target = current_anchor)
 })
 */
+
+Generator.PrintToConsole(
+    Codes:
+    new SPWN.Basics.SPWNCodes
+    {
+        // Example 3: Quite more advanced features
+        Comment("Example 3"),
+        NewLine(),
+        
+        // String: Most escaped characters will be auto-escaped if turned on.
+        // ExperimentalFeatures.CreateConstantVariable: Create Variable without specifying variable name
+        // In general, as long as you write the variable in the format "out [varType] [varName]" then you should be fine
+        SPWN.Utilities.ExperimentalFeatures.CreateConstantVariable(out var StringTest1,
+            new SPWN.DataTypes.String("Hello, here are some C# escaped chars: \\ \n <- See how it auto escaped")
+        ),
+
+        SPWN.Utilities.ExperimentalFeatures.CreateConstantVariable(out var StringTest2,
+            new SPWN.DataTypes.String("Hello, here are some normal character: \\ \n <- Auto Escaped is off", AutoEscape: false)
+        ),
+
+        SPWN.Utilities.ExperimentalFeatures.CreateConstantVariable(out var StringTest3,
+            new SPWN.DataTypes.String("Hello, here are some normal character: \\ \n <- Auto Escaped is off", AutoEscape: false)
+        ),
+    }
+);
+/* Code Output:
+// Example 3
+
+StringTest1 = "Hello, here are some C# escaped chars: \\ \n <- See how it auto escaped"
+StringTest2 = "Hello, here are some normal character: \
+ <- Auto Escaped is off"
+StringTest3 = "Hello, here are some normal character: \
+ <- Auto Escaped is off"
+ */

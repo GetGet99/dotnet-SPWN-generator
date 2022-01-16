@@ -1,7 +1,7 @@
 ﻿namespace SPWNCreator;
 using SPWN.Basics;
 using SysColGen = System.Collections.Generic;
-using static SPWN.Utils.Implementation.Methods;
+using static SPWN.Utilities.Implementation.Methods;
 using SPWN.DataTypes.Base;
 public static class Generator
 {

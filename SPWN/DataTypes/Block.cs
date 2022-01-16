@@ -2,7 +2,7 @@
 
 using Base;
 using InternalImplementation;
-using Utils.Wrapper;
+using Utilities.Wrapper;
 [SPWNType("@block")]
 class Block : SPWNValueBase, IRangeImplemented, IPulseAble<Block>, ICanBeConstant, ICanBeMutable
 {

@@ -2,7 +2,7 @@
 
 using DataTypes;
 using InternalImplementation;
-using Utils.Wrapper;
+using Utilities.Wrapper;
 interface IPulseAble<SPWNType> where SPWNType : SPWNValueBase
 {
     string ValueAsString { get; }

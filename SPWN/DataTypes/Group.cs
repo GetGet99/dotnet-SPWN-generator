@@ -2,7 +2,7 @@
 
 using Base;
 using SPWN.InternalImplementation;
-using Utils.Wrapper;
+using Utilities.Wrapper;
 
 [SPWNType("@group")]
 public class Group : SPWNValueBase, IRangeImplemented, IPulseAble<Group>, ICanBeConstant, ICanBeMutable

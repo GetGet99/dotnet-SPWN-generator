@@ -1,6 +1,7 @@
-﻿namespace SPWN.Utils;
+﻿namespace SPWN.Utilities;
 
 using CodeAnalysis = System.Diagnostics.CodeAnalysis;
+using CompilerServices = System.Runtime.CompilerServices;
 
 using SPWN.Basics;
 using InternalImplementation;
@@ -35,5 +36,27 @@ public static class Basics
     public static SPWNCode? RunDotNetCode(System.Func<SPWNCode> Function)
     {
         return Function.Invoke();
+    }
+}
+
+public static class ExperimentalFeatures
+{
+    public static SPWNCode CreateConstantVariable<T>(out T Constant, T Value, [CompilerServices.CallerArgumentExpression("Constant")] string? VariableName = null) where T : SPWNValueBase, ICanBeConstant
+    {
+        if (VariableName == null) throw new System.ArgumentNullException(nameof(VariableName));
+        VariableName = VariableName.Split(" ")[^1];
+
+        var newvar = new Variable<T>(Value, VariableName);
+        SPWNCode code = newvar.InitConstant(out Constant);
+        return code;
+    }
+    public static SPWNCode CreateMutableVariable<T>([CodeAnalysis.NotNull] out Variable<T> OutVariable, T Value, [CompilerServices.CallerArgumentExpression("OutVariable")] string? VariableName = null) where T : SPWNValueBase, ICanBeMutable
+    {
+        if (VariableName == null) throw new System.ArgumentNullException(nameof(VariableName));
+        VariableName = VariableName.Split(" ")[^1];
+
+        var newvar = new Variable<T>(Value, VariableName);
+        SPWNCode code = newvar.InitMutable(out OutVariable);
+        return code;
     }
 }

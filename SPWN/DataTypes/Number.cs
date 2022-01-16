@@ -1,6 +1,6 @@
 ﻿namespace SPWN.DataTypes;
 using SPWN.InternalImplementation;
-using Utils.Wrapper;
+using Utilities.Wrapper;
 using Base;
 
 [SPWNType("@number")]
@@ -23,5 +23,21 @@ public class Number : SPWNValueBase, IRangeImplemented, ICanBeConstant, ICanBeMu
         .AddParameter("istop", IStop)
         .AddParameter("ostart", OStart)
         .AddParameter("ostop", OStop)
+        .Build<Number>();
+
+    public static Number operator +(Number a, Number b)
+        => new SPWNOperatorOverloadBuilder<Number>("+", a, b)
+        .Build<Number>();
+
+    public static Number operator -(Number a, Number b)
+        => new SPWNOperatorOverloadBuilder<Number>("-", a, b)
+        .Build<Number>();
+
+    public static Number operator *(Number a, Number b)
+        => new SPWNOperatorOverloadBuilder<Number>("*", a, b)
+        .Build<Number>();
+
+    public static Number operator /(Number a, Number b)
+        => new SPWNOperatorOverloadBuilder<Number>("/", a, b)
         .Build<Number>();
 }

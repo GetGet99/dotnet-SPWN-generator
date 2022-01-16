@@ -3,8 +3,8 @@
 using InternalImplementation;
 using Basics;
 using Base;
-using Utils.Wrapper;
-using static Utils.Basics;
+using Utilities.Wrapper;
+using static Utilities.Basics;
 [SPWNType("@dictionary")]
 public class Module : SPWNValueBase, ICanBeConstant, ICanBeMutable
 {

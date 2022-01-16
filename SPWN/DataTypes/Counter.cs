@@ -1,7 +1,7 @@
 ﻿namespace SPWN.DataTypes;
 using Basics;
 using InternalImplementation;
-using Utils.Wrapper;
+using Utilities.Wrapper;
 using Base;
 [SPWNType("@counter")]
 public class Counter : SPWNValueBase, ICanBeConstant

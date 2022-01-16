@@ -1,6 +1,6 @@
 ﻿namespace SPWN.DataTypes;
 using InternalImplementation;
-using Utils.Wrapper;
+using Utilities.Wrapper;
 using Base;
 [SPWNType("@event")]
 public class Event : SPWNValueBase, ICanBeConstant, ICanBeMutable
