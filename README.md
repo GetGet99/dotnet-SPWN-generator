@@ -1,4 +1,4 @@
-# dotnet-SPWN-generator
+# .NET SPWN Generator
 
 Simple, incomplete generator that generates SPWN code from .NET 6 code.
 
