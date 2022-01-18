@@ -60,7 +60,7 @@ public class Dictionary<Value> : SPWNValueBase, ICanBeConstant, ICanBeMutable wh
         => new SPWNMethodCallBuilder<Dictionary<Value>>(ValueAsString, "values")
         .Build<Array<String>>();
 }
-class Dictionary : Dictionary<SPWNValueBase>
+public class Dictionary : Dictionary<SPWNValueBase>
 {
     public Dictionary(SysColGen.Dictionary<string, SPWNValueBase> collection) : base(collection) { }
     public Dictionary(SPWNExpr<Dictionary> Value) => ValueAsString = Value.CreateCode();

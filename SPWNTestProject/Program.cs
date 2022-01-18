@@ -1,11 +1,12 @@
 ﻿// Where's public static void Main() Thing? If you're confused: https://aka.ms/new-console-template
 
-using SPWNCreator;
+using SPWN;
 
 using static SPWN.Utilities.Basics;
 // Example 1
 
 // Create and Store value in C# variable to Reuse the same value
+
 
 var group1 = new SPWN.DataTypes.Group(1);
 
@@ -33,6 +34,8 @@ Generator.PrintToConsole(
         // To run a statement parallelly, use RunParallel(ISPWNCode code), Part of SPWN.Basics.SPWNUtils
         RunParallel(group1.Follow(group3))
     });
+
+
 
 /* Code Output:
 // Example 1
@@ -173,20 +176,7 @@ Generator.PrintToConsole(
         ),
 
         SPWN.Utilities.ExperimentalFeatures.CreateConstantVariable(out var StringTest2,
-            new SPWN.DataTypes.String("Hello, here are some normal character: \\ \n <- Auto Escaped is off", AutoEscape: false)
-        ),
-
-        SPWN.Utilities.ExperimentalFeatures.CreateConstantVariable(out var StringTest3,
-            new SPWN.DataTypes.String("Hello, here are some normal character: \\ \n <- Auto Escaped is off", AutoEscape: false)
+            new SPWN.DataTypes.String("Hello, here are some chars that was not autoescaped: \\ \n <- Auto Escaped is off", AutoEscape: false)
         ),
     }
 );
-/* Code Output:
-// Example 3
-
-StringTest1 = "Hello, here are some C# escaped chars: \\ \n <- See how it auto escaped"
-StringTest2 = "Hello, here are some normal character: \
- <- Auto Escaped is off"
-StringTest3 = "Hello, here are some normal character: \
- <- Auto Escaped is off"
- */

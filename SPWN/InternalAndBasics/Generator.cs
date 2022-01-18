@@ -1,4 +1,4 @@
-﻿namespace SPWNCreator;
+﻿namespace SPWN;
 using SPWN.Basics;
 using SysColGen = System.Collections.Generic;
 using static SPWN.Utilities.Implementation.Methods;
@@ -57,5 +57,44 @@ public static class Generator
         main += Codes.CreateCode().ReplaceLineEndings("\n").Replace("\t", new string(' ', 4));
         dict.Add("main.spwn", main);
         return dict;
+    }
+
+    public static void WriteToFile(SPWNCodes Codes)
+    {
+        var allFiles = GenerateAsDict(Codes);
+        foreach (var (fileName, code) in allFiles)
+        {
+            System.IO.File.WriteAllText(fileName, code);
+        }
+    }
+
+    public static System.Diagnostics.Process WriteAndCompile(SPWNCodes Codes, bool LevelConsoleOutput = false, bool WaitForExit = false)
+    {
+        WriteToFile(Codes);
+        var process = new System.Diagnostics.Process()
+        {
+            StartInfo = new System.Diagnostics.ProcessStartInfo
+            {
+                FileName = "spwn",
+                Arguments = $"build main.spwn {(LevelConsoleOutput ? "-c" : "")}",
+                CreateNoWindow = true,
+                ErrorDialog = false,
+                RedirectStandardError = true,
+                RedirectStandardOutput = true,
+                WorkingDirectory = System.Environment.CurrentDirectory
+            }
+        };
+        process.ErrorDataReceived += (sendingProcess, errorLine) => System.Console.Error.WriteLine(errorLine.Data);
+        process.OutputDataReceived += (sendingProcess, dataLine) => System.Console.WriteLine(dataLine.Data);
+        process.Start();
+        process.BeginOutputReadLine();
+        process.BeginErrorReadLine();
+
+
+        if (WaitForExit && !process.HasExited) process.WaitForExit();
+
+        System.Console.WriteLine($"SPWN exited with code {process.ExitCode}");
+
+        return process;
     }
 }

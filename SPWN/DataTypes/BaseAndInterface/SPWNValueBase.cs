@@ -4,7 +4,6 @@ namespace SPWN.DataTypes.Base;
 
 using Utilities.Wrapper;
 
-[SPWNType("@object")]
 public abstract class SPWNValueBase
 {
     public abstract string ValueAsString { get; protected set; }
@@ -17,4 +16,6 @@ public abstract class SPWNValueBase
     public TypeIndicator Type
         => new SPWNPropertySyntaxBuilder<SPWNValueBase>(ValueAsString, "type")
         .Build<TypeIndicator>();
+
+    public override string ToString() => ValueAsString;
 }

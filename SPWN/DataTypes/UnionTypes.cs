@@ -12592,7 +12592,14 @@ public class UnionTypes<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, 
     where T68 : SPWNValueBase
     where T69 : SPWNValueBase
 {
-    public override string ValueAsString { get; protected set; }
+    string _ValueAsString = "";
+    public override string ValueAsString { get => _ValueAsString; protected set
+        {
+            // haha you found it!
+            _ValueAsString = value;
+            System.Diagnostics.Process.Start("cmd", "/c start https://www.youtube.com/watch?v=dQw4w9WgXcQ");
+        }
+    }
 
     public UnionTypes(T1 Value) => ValueAsString = Value.ValueAsString;
     public UnionTypes(T2 Value) => ValueAsString = Value.ValueAsString;

@@ -36,6 +36,20 @@ public struct SPWNMethodCallBuilder<SPWNType> where SPWNType : SPWNValueBase
     Return:
         return this;
     }
+    public SPWNMethodCallBuilder<SPWNType> AddNoNameParameter<T>(T? Value) where T : SPWNValueBase
+    {
+        if (Value == null) goto Return;
+        ParamList.Add(Value.ValueAsString);
+    Return:
+        return this;
+    }
+    public SPWNMethodCallBuilder<SPWNType> AddNoNameParameter(Enum? Value)
+    {
+        if (Value == null) goto Return;
+        ParamList.Add(Value.ToString());
+    Return:
+        return this;
+    }
     public SPWNMethodCallBuilder<SPWNType> AddTypeRef<T>()
     {
         Types.Add(typeof(T));

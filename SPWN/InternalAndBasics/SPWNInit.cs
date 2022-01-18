@@ -44,6 +44,7 @@ namespace SPWN.Basics
         {
             return string.Join("\n", this.Apply(code => code == null ? "// [null command]" : code.CreateCode()));
         }
+        public override string ToString() => CreateCode();
     }
 
     public static partial class Extensions
@@ -154,6 +155,8 @@ namespace SPWN.InternalImplementation
 
         public abstract string CreateCode();
         public static implicit operator Basics.SPWNCodes(SPWNCode code) => new(code);
+
+        public override string ToString() => CreateCode();
     }
 
     
