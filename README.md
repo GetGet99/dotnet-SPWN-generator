@@ -44,7 +44,6 @@ Future Plans:
 * Pattern
 * Range
 * Module
-* Trigger
 * Macro
 * and more? idk
 
