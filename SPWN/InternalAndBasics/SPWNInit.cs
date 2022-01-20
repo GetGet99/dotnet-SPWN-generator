@@ -121,13 +121,13 @@ namespace SPWN.Basics
         where T : SPWNValueBase, ICanBeMutable
         {
             VariableToGetValue = Variable;
-            return Variable.GetInitializationCode();
+            return Variable.GetInitializationCode(Mutable: true);
         }
         public static SPWNCode InitConstant<T>(this Variable<T> Variable, [NotNull] out T Value)
         where T : SPWNValueBase, ICanBeConstant
         {
             Value = Variable.Value;
-            return Variable.GetInitializationCode();
+            return Variable.GetInitializationCode(Mutable: false);
         }
 
         public static T AsValue<T>(this SPWNExpr<T> expr) where T : SPWNValueBase

@@ -118,6 +118,25 @@ public class Group : SPWNValueBase, IRangeImplemented, IPulseAble<Group>, ICanBe
 
     /**
      * <summary>
+     * Implementation of the move trigger
+     * </summary>
+     * <param name="X">X position to move to in units (1 grid square is 30 units) (Default: Null)</param>
+     * <param name="Y">Will move to the object only on the X-axis (Default: Null)</param>
+     * <param name="Duration">Duration of movement (Default: 0)</param>
+     * <param name="Easing">Easting type (Default: NONE)</param>
+     * <param name="EasingRate">Easting rate (Default: 2)</param>
+     */
+    public SPWNCode Move(Number? X = null, Number? Y = null, Number? Duration = null, EasingTypes? Easing = null, Number? EasingRate = null)
+        => new SPWNMethodCallBuilder<Group>($"{ValueAsString}.move")
+        .AddParameter("x", X)
+        .AddParameter("y", Y)
+        .AddParameter("duration", Duration)
+        .AddParameter("easing", Easing)
+        .AddParameter("easing_rate", EasingRate)
+        .Build();
+
+    /**
+     * <summary>
      * Alias of MoveToXY
      * </summary>
      * <param name="X">X position to move to in units (1 grid square is 30 units) (Default: Null)</param>

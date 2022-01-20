@@ -5,7 +5,7 @@ VisualStudioVersion = 17.1.32104.313
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SPWNTestProject", "SPWNTestProject\SPWNTestProject.csproj", "{E2A3B48E-2E87-4F43-9513-4E48ED3B7DE5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SPWN", "SPWN\SPWN.csproj", "{9F98CE67-A09F-42AC-9A45-84B0635D5174}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SPWN", "SPWN\SPWN.csproj", "{9F98CE67-A09F-42AC-9A45-84B0635D5174}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

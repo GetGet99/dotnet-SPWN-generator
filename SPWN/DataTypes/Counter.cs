@@ -11,8 +11,8 @@ public class Counter : SPWNValueBase, ICanBeConstant
     protected Counter(Number Source, Number? NumberOfBits = null, Boolean? Reset = null)
         => ValueAsString = new SPWNMethodCallBuilder<Counter>("counter")
         .AddParameter("source", Source)
-        .AddParameter("bits",NumberOfBits)
-        .AddParameter("reset",Reset)
+        .AddParameter("bits", NumberOfBits)
+        .AddParameter("reset", Reset)
         .Build<Counter>().ValueAsString;
     protected Counter(Boolean Source, Number? NumberOfBits = null, Boolean? Reset = null)
         => ValueAsString = new SPWNMethodCallBuilder<Counter>("counter")
@@ -34,54 +34,96 @@ public class Counter : SPWNValueBase, ICanBeConstant
       * <param name="NumberOfBits">Should NOT be 1</param>
       */
     public static NumberCounter FromNumber(Number Source, Number? NumberOfBits = null, Boolean? Reset = null)
-        => new (Source, NumberOfBits, Reset);
+        => new(Source, NumberOfBits, Reset);
 
     public static BooleanCounter FromBoolean(Boolean Source, Boolean? Reset = null)
-        => new (Source, Reset);
-    
+        => new(Source, Reset);
+
     /**
       * <param name="NumberOfBits">Should NOT be 1</param>
       */
     public static NumberCounter FromItem(Item Source, Number? NumberOfBits = null, Boolean? Reset = null)
-        => new (Source, NumberOfBits, Reset);
+        => new(Source, NumberOfBits, Reset);
 
 
-    
+    public SPWNCode Display(Number X, Number Y)
+        => new SPWNMethodCallBuilder<Counter>(ValueAsString, "display")
+        .AddParameter("x", X)
+        .AddParameter("y", Y)
+        .Build();
 
     public SPWNCode Add(Number Num) =>
         new SPWNMethodCallBuilder<Counter>($"{ValueAsString}.add")
         .AddParameter("num", Num)
         .Build();
 
-    public SPWNCode AddTo(Counter Items) =>
+    public SPWNCode AddTo(Counter Items, Number? Factor = default, MacroAction<Number>? ForEach = null) =>
         new SPWNMethodCallBuilder<Counter>($"{ValueAsString}.add")
+        .AddParameter("factor",Factor)
+        .AddParameter("for_each", ForEach)
         .AddParameter("items", Items)
         .Build();
 
-    public SPWNCode AddTo(Item Items) =>
+    public SPWNCode AddTo(Item Items, Number? Factor = default, MacroAction<Number>? ForEach = null) =>
         new SPWNMethodCallBuilder<Counter>($"{ValueAsString}.add")
+        .AddParameter("factor", Factor)
+        .AddParameter("for_each", ForEach)
         .AddParameter("items", Items)
         .Build();
 
-    public SPWNCode AddTo(Array<Counter> Items) =>
+    public SPWNCode AddTo(Array<Counter> Items, Number? Factor = default, MacroAction<Number>? ForEach = null) =>
         new SPWNMethodCallBuilder<Counter>($"{ValueAsString}.add")
+        .AddParameter("factor", Factor)
+        .AddParameter("for_each", ForEach)
         .AddParameter("items", Items)
         .Build();
 
-    public SPWNCode AddTo(Array<Item> Items) =>
+    public SPWNCode AddTo(Array<Item> Items, Number? Factor = default, MacroAction<Number>? ForEach = null) =>
         new SPWNMethodCallBuilder<Counter>($"{ValueAsString}.add")
+        .AddParameter("factor", Factor)
+        .AddParameter("for_each", ForEach)
         .AddParameter("items", Items)
         .Build();
 
     public SPWNCode AddToMultifactor(Array<Array<Counter>> Items) =>
-        new SPWNMethodCallBuilder<Counter>($"{ValueAsString}.add")
+        new SPWNMethodCallBuilder<Counter>($"{ValueAsString}.add_to_multifactor")
         .AddParameter("items", Items)
         .Build();
 
     public SPWNCode AddToMultifactor(Array<Array<Item>> Items) =>
-        new SPWNMethodCallBuilder<Counter>($"{ValueAsString}.add")
+        new SPWNMethodCallBuilder<Counter>($"{ValueAsString}.add_to_multifactor")
         .AddParameter("items", Items)
         .Build();
+
+
+    public SPWNCode SubtractFrom(Counter Items, Number? Factor = default, MacroAction<Number>? ForEach = null) =>
+        new SPWNMethodCallBuilder<Counter>($"{ValueAsString}.subtract_from")
+        .AddParameter("factor", Factor)
+        .AddParameter("for_each", ForEach)
+        .AddParameter("items", Items)
+        .Build();
+
+    public SPWNCode SubtractFrom(Item Items, Number? Factor = default, MacroAction<Number>? ForEach = null) =>
+        new SPWNMethodCallBuilder<Counter>($"{ValueAsString}.adsubtract_fromd")
+        .AddParameter("factor", Factor)
+        .AddParameter("for_each", ForEach)
+        .AddParameter("items", Items)
+        .Build();
+
+    public SPWNCode SubtractFrom(Array<Counter> Items, Number? Factor = default, MacroAction<Number>? ForEach = null) =>
+        new SPWNMethodCallBuilder<Counter>($"{ValueAsString}.subtract_from")
+        .AddParameter("factor", Factor)
+        .AddParameter("for_each", ForEach)
+        .AddParameter("items", Items)
+        .Build();
+
+    public SPWNCode SubtractFrom(Array<Item> Items, Number? Factor = default, MacroAction<Number>? ForEach = null) =>
+        new SPWNMethodCallBuilder<Counter>($"{ValueAsString}.subtract_from")
+        .AddParameter("factor", Factor)
+        .AddParameter("for_each", ForEach)
+        .AddParameter("items", Items)
+        .Build();
+
 
     public SPWNCode Reset() =>
         new SPWNMethodCallBuilder<Counter>($"{ValueAsString}.reset")
@@ -94,12 +136,12 @@ public class Counter : SPWNValueBase, ICanBeConstant
         => new SPWNMethodCallBuilder<Counter>(ValueAsString, "_assign_")
         .AddParameter("num", Num)
         .Build();
-    
+
     public SPWNCode SetTo(Counter Num) => Assign(Num);
 
     //public ISPWNCode SetTo(Number n) => new StringSPWNCode($"{ValueAsString} = {n.ValueAsString}");
 
-    public Boolean IsGreaterThan(Number n) => new SPWNOperatorOverloadBuilder<Counter>(">" ,this, n).Build<Boolean>();
+    public Boolean IsGreaterThan(Number n) => new SPWNOperatorOverloadBuilder<Counter>(">", this, n).Build<Boolean>();
     public Boolean IsGreaterThanOrEqual(Number n) => new SPWNOperatorOverloadBuilder<Counter>(">=", this, n).Build<Boolean>();
     public Boolean IsLessThan(Number n) => new SPWNOperatorOverloadBuilder<Counter>("<", this, n).Build<Boolean>();
     public Boolean IsLessThanOrEqual(Number n) => new SPWNOperatorOverloadBuilder<Counter>("<=", this, n).Build<Boolean>();

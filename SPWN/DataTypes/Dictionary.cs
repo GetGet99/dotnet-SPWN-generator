@@ -22,7 +22,36 @@ public class Dictionary<Value> : SPWNValueBase, ICanBeConstant, ICanBeMutable wh
         get => Get(Key);
         set => Set(Key, value);
     }
-    
+
+
+    public Boolean IsEmpty
+        => new SPWNMethodCallBuilder<Dictionary<Value>>(ValueAsString, "is_empty")
+        .Build<Boolean>();
+
+    public Array<String> Keys
+        => new SPWNMethodCallBuilder<Dictionary<Value>>(ValueAsString, "keys")
+        .Build<Array<String>>();
+
+    public Array<String> Values
+        => new SPWNMethodCallBuilder<Dictionary<Value>>(ValueAsString, "values")
+        .Build<Array<String>>();
+
+    public Array<Tuple<String, Value>> Items
+        => new SPWNMethodCallBuilder<Dictionary<Value>>(ValueAsString, "items")
+        .Build<Array<Tuple<String, Value>>>();
+
+    public Value Set(String Key, Value Value)
+        => new SPWNMethodCallBuilder<Dictionary<Value>>(ValueAsString, "get")
+        .AddParameter("key", Key)
+        .AddParameter("val", Value)
+        .Build<Value>();
+
+    public Value Get(String Key, Value? Default = null)
+        => new SPWNMethodCallBuilder<Dictionary<Value>>(ValueAsString, "get")
+        .AddParameter("key", Key)
+        .AddParameter("default", Default)
+        .Build<Value>();
+
     public SPWNCode Clear()
         => new SPWNMethodCallBuilder<Dictionary<Value>>(ValueAsString, "clear")
         .Build();
@@ -31,34 +60,6 @@ public class Dictionary<Value> : SPWNValueBase, ICanBeConstant, ICanBeMutable wh
         => new SPWNMethodCallBuilder<Dictionary<Value>>(ValueAsString, "contains_value")
         .AddParameter("value", Value)
         .Build<Boolean>();
-
-    public Value Get(String Key, Value? Default = null)
-        => new SPWNMethodCallBuilder<Dictionary<Value>>(ValueAsString, "get")
-        .AddParameter("key", Key)
-        .AddParameter("default", Default)
-        .Build<Value>();
-
-    public Boolean IsEmpty
-        => new SPWNMethodCallBuilder<Dictionary<Value>>(ValueAsString, "is_empty")
-        .Build<Boolean>();
-
-    public Array<Tuple<String,Value>> Items
-        => new SPWNMethodCallBuilder<Dictionary<Value>>(ValueAsString, "items")
-        .Build<Array<Tuple<String, Value>>>();
-
-    public Array<String> Keys
-        => new SPWNMethodCallBuilder<Dictionary<Value>>(ValueAsString, "keys")
-        .Build<Array<String>>();
-
-    public Value Set(String Key, Value Value)
-        => new SPWNMethodCallBuilder<Dictionary<Value>>(ValueAsString, "get")
-        .AddParameter("key", Key)
-        .AddParameter("val", Value)
-        .Build<Value>();
-
-    public Array<String> Values
-        => new SPWNMethodCallBuilder<Dictionary<Value>>(ValueAsString, "values")
-        .Build<Array<String>>();
 }
 public class Dictionary : Dictionary<SPWNValueBase>
 {
