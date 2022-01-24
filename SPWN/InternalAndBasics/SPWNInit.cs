@@ -210,7 +210,7 @@ namespace SPWN.InternalImplementation
          * Even if it does not have correct syntax.
          * </summary>
          */
-        static bool AllowUnsafeCodeFromString { get; set; } = false;
+        public static bool AllowUnsafeCodeFromString { get; set; } = false;
         readonly string code;
         public UnsafeStringSPWNCode(string Code)
         {

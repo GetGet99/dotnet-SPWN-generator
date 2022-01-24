@@ -73,7 +73,7 @@ public class Group : SPWNValueBase, IRangeImplemented, IPulseAble<Group>, ICanBe
      * <param name="Duration">Duration of following (Default: 999)</param>
      */
     public SPWNCode FollowPlayerY(Number? Speed = null, Number? Delay = null, Number? Offset = null, Number? MaxSpeed = null, Number? Duration = null)
-        => new SPWNMethodCallBuilder<Group>($"{ValueAsString}.follow_lerp")
+        => new SPWNMethodCallBuilder<Group>($"{ValueAsString}.follow_player_y")
         .AddParameter("speed", Speed)
         .AddParameter("delay", Delay)
         .AddParameter("offset", Offset)
@@ -89,7 +89,7 @@ public class Group : SPWNValueBase, IRangeImplemented, IPulseAble<Group>, ICanBe
      * <param name="Duration">Duration of lock (Default = 999)</param>
      */
     public SPWNCode LockToPlayer(Boolean? LockX = null, Boolean? LockY = null, Number? Duration = null)
-        => new SPWNMethodCallBuilder<Group>($"{ValueAsString}.follow_lerp")
+        => new SPWNMethodCallBuilder<Group>($"{ValueAsString}.lock_to_player")
         .AddParameter("lock_x", LockX)
         .AddParameter("lock_y", LockY)
         .AddParameter("duration", Duration)
@@ -137,31 +137,6 @@ public class Group : SPWNValueBase, IRangeImplemented, IPulseAble<Group>, ICanBe
 
     /**
      * <summary>
-     * Alias of MoveToXY
-     * </summary>
-     * <param name="X">X position to move to in units (1 grid square is 30 units) (Default: Null)</param>
-     * <param name="Y">Will move to the object only on the X-axis (Default: Null)</param>
-     * <param name="Duration">Duration of movement (Default: 0)</param>
-     * <param name="Easing">Easting type (Default: NONE)</param>
-     * <param name="EasingRate">Easting rate (Default: 2)</param>
-     */
-    public SPWNCode MoveTo(Number? X = null, Number? Y = null, Number? Duration = null, EasingTypes? Easing = null, Number? EasingRate = null)
-        => MoveToXY(X: X, Y: Y, Duration: Duration, Easing: Easing, EasingRate: EasingRate);
-
-    /**
-     * <summary>
-     * Alias of MoveToXY
-     * </summary>
-     * <param name="Point">X and Y position to move to in units (1 grid square is 30 units) (Default: Null)</param>
-     * <param name="Duration">Duration of movement (Default: 0)</param>
-     * <param name="Easing">Easting type (Default: NONE)</param>
-     * <param name="EasingRate">Easting rate (Default: 2)</param>
-     */
-    public SPWNCode MoveTo(System.Drawing.PointF Point, Number? Duration = null, EasingTypes? Easing = null, Number? EasingRate = null)
-        => MoveToXY(X: Point.X, Y: Point.Y, Duration: Duration, Easing: Easing, EasingRate: EasingRate);
-
-    /**
-     * <summary>
      * Moves group to a specific coordinate
      * </summary>
      * <param name="X">X position to move to in units (1 grid square is 30 units) (Default: Null)</param>
@@ -171,7 +146,7 @@ public class Group : SPWNValueBase, IRangeImplemented, IPulseAble<Group>, ICanBe
      * <param name="EasingRate">Easting rate (Default: 2)</param>
      */
     public SPWNCode MoveToXY(Number? X = null, Number? Y = null, Number? Duration = null, EasingTypes? Easing = null, Number? EasingRate = null)
-        => new SPWNMethodCallBuilder<Group>($"{ValueAsString}.move_to")
+        => new SPWNMethodCallBuilder<Group>($"{ValueAsString}.move_to_xy")
         .AddParameter("x", X)
         .AddParameter("y", Y)
         .AddParameter("duration", Duration)
@@ -203,7 +178,7 @@ public class Group : SPWNValueBase, IRangeImplemented, IPulseAble<Group>, ICanBe
      * <param name="Single">Saves groups and objects if the group only contains one object</param>
      */
     public SPWNCode PreciseMove(Number X, Number Y, Number? Duration = null, EasingTypes? Easing = null, Number? EasingRate = null, Boolean? Single = null)
-        => new SPWNMethodCallBuilder<Group>($"{ValueAsString}.move_to")
+        => new SPWNMethodCallBuilder<Group>($"{ValueAsString}.precise_move")
         .AddParameter("x", X)
         .AddParameter("y", Y)
         .AddParameter("duration", Duration)

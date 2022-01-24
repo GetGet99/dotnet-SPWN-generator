@@ -6,7 +6,13 @@ using Base;
 [SPWNType("@number")]
 public class Number : SPWNValueBase, IRangeImplemented, ICanBeConstant, ICanBeMutable
 {
-    public override string ValueAsString { get; protected set; }
+    public class Epsilon : Number
+    {
+        public Epsilon() => ValueAsString = double.Epsilon.ToString();
+        public Epsilon(SPWNExpr<Epsilon> Value) => ValueAsString = Value.CreateCode();
+    }
+    public override string ValueAsString { get; protected set; } = "";
+    protected Number() { }
     public Number(double Value) => ValueAsString = Value.ToString();
     public Number(SPWNExpr<Number> Value) => ValueAsString = Value.CreateCode();
     public static implicit operator Number(double d) => new(d);

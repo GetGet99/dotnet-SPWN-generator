@@ -11,6 +11,7 @@
     <Product>DotNetSPWNGenerator</Product>
     <AssemblyName>DotNetSPWNGenerator</AssemblyName>
     <RootNamespace>SPWN</RootNamespace>
+    <PackageId>SPWNGenerator</PackageId>
   </PropertyGroup>
 
 </Project>
